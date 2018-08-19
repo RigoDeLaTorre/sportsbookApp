@@ -1,0 +1,72 @@
+@import "gameselected";
+
+#nfl-section {
+  background: #ededed;
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content: center;
+  margin:0 auto;
+
+  .games-section {
+    flex:2;
+    padding: 20px;
+    margin: 0 auto;
+.title-headers{
+  display:flex;
+  justify-content: space-between;
+  text-align: center;
+  font-size:.7em;
+  margin-bottom:.5rem;
+  .game-header{flex:3;}
+    .spread-header{flex:1;}
+    .moneyline-header{flex:1;}
+    .overunder-header{flex:1;}
+}
+    .games-container {
+      background: white;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+      cursor:pointer;
+      &:hover{
+        background:#ece7e7;
+      }
+
+      .gamelist {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        color:#4e4343;
+
+        .games{
+          display:flex;
+          justify-content: center;
+          h5{
+            font-size:.8em;
+            padding:7px;
+          }
+
+        }
+        .teams{
+          flex:3;
+          .hometeam{
+            border-bottom:1px solid #e6dcdc;
+          }
+        }
+        .spread{
+          border: 1px solid #e6dcdc;
+          flex:1;
+        }
+        .moneyline{
+          flex:1;
+          border: 1px solid #e6dcdc;
+
+        }
+        .total{
+          flex:1;
+          border: 1px solid #e6dcdc;
+        }
+      }
+    }
+  }
+}
