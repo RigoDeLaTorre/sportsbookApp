@@ -1,11 +1,214 @@
-@import url( 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700');
 @import "reset";
-@import "nfl";
-@import "nav";
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700');
 @import "header";
-
 
 body {
   font-family: 'Roboto', sans-serif;
-  background:#ededed;
+  background: #ededed;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(189,52,75,1);
+  background: -moz-linear-gradient(-45deg, rgba(189,52,75,1) 0%, rgba(8,36,64,1) 100%);
+  background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(189,52,75,1)), color-stop(100%, rgba(8,36,64,1)));
+  background: -webkit-linear-gradient(-45deg, rgba(189,52,75,1) 0%, rgba(8,36,64,1) 100%);
+  background: -o-linear-gradient(-45deg, rgba(189,52,75,1) 0%, rgba(8,36,64,1) 100%);
+  background: -ms-linear-gradient(-45deg, rgba(189,52,75,1) 0%, rgba(8,36,64,1) 100%);
+  background: linear-gradient(135deg, rgba(189,52,75,1) 0%, rgba(8,36,64,1) 100%);
+}
+
+.app-container {
+  margin-top: 10rem;
+  width: 100%;
+  background: #fff;
+  max-width: 1400px;
+  min-height: calc(100vh - 15vh);
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: 15% 65% 20%;
+
+  #nav {
+    .account-dropdown {
+      display: grid;
+      grid-template-columns: 1fr 4fr 1fr;
+  padding: 15px 5px;
+
+      .logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .fab {
+          font-size: 2rem;
+        }
+      }
+
+      .name {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .fa-chevron-down {
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    nav {
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      padding: 3rem;
+      min-width: 400px;
+
+      a {
+        text-decoration: none;
+        color: #353232;
+        padding: 15px 10px;
+        line-height: 2;
+
+        &:hover {
+          color: orange;
+        }
+      }
+    }
+  }
+
+  #nfl-section {
+    background: #ededed;
+
+    .games-section {
+      .title-headers {
+        display: flex;
+        justify-content: space-between;
+        text-align: center;
+        font-size: 0.7em;
+        margin-bottom: 0.5rem;
+
+        .game-header {
+          flex: 3;
+        }
+
+        .spread-header {
+          flex: 1;
+        }
+
+        .moneyline-header {
+          flex: 1;
+        }
+
+        .overunder-header {
+          flex: 1;
+        }
+      }
+
+      .games-container {
+        background: white;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+        cursor: pointer;
+
+        &:hover {
+          background: #ece7e7;
+        }
+
+        .gamelist {
+          display: flex;
+          flex-flow: row nowrap;
+          justify-content: space-between;
+          color: #4e4343;
+
+          .games {
+            display: flex;
+            justify-content: center;
+
+            h5 {
+              font-size: 0.8em;
+              padding: 7px;
+            }
+          }
+
+          .teams {
+            flex: 3;
+
+            .hometeam {
+              border-bottom: 1px solid #e6dcdc;
+            }
+          }
+
+          .spread {
+            border: 1px solid #e6dcdc;
+            flex: 1;
+          }
+
+          .moneyline {
+            flex: 1;
+            border: 1px solid #e6dcdc;
+          }
+
+          .total {
+            flex: 1;
+            border: 1px solid #e6dcdc;
+          }
+        }
+      }
+    }
+  }
+
+  #game-selected {
+    background: #e4e0e0;
+
+    h1 {
+      color: #ffffff;
+  background: #4c924c;
+  font-size: 1.5rem;
+
+  text-align: center;
+}
+
+    button {
+      background: orange;
+      font-size: 1rem;
+      text-align: center;
+      max-width: 100%;
+      width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .games-selected {
+      font-size: 0.8em;
+      margin-bottom: 1rem;
+      color: #364250;
+      background: white;
+      font-weight: 500;
+
+      &:hover {
+        background: #eac5c5;
+      }
+
+      .game-title {
+        background: #99bb99;
+        padding: 10px;
+
+        span {
+          color: black;
+        }
+      }
+
+      h5 {
+        margin-top: 1rem;
+        font-weight: 300;
+        padding: 10px;
+      }
+    }
+  }
 }

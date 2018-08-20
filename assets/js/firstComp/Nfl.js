@@ -1,41 +1,20 @@
 import React, { Component} from 'react'
 import ReactDOM from 'react-dom';
-import nfldata from './data/nfldata.js'
-import Gameselected from './Gameselected.js'
-import Nav from './Nav.js'
+
 
 export default class Nfl extends Component {
   constructor () {
     super()
     this.state = {
-      nfldata:nfldata,
-      gameSelected:[]
+
     }
   }
 
-  gameSelected = (item)=>{
-    let currentItem = this.state.gameSelected
-    let currentState = [...this.state.gameSelected, item]
-    let names = [...new Set(currentState.map(a => a))];
-    this.setState({
-      gameSelected:names
-    })
-this.addClass(item)
-  }
-  handleChange =(name)=>{
-    this.setState({
-       gameSelected: this.state.gameSelected.filter(el => el !== name)
-    })
-
-  }
-  addClass = (item)=>{
-
-  }
 
 gameLoop=()=>{
-  return this.state.nfldata.map((item)=>{
+  return this.props.games.map((item)=>{
     return(
-<div className="games-container" key ={item.ID} onClick={()=>this.gameSelected(item)}>
+<div className="games-container" key ={item.ID} onClick={()=>this.props.gameSelected(item)}>
       <div className ="gamelist" >
         <div className ="games teams">
           <h5 className="hometeam">{item.HomeTeam}</h5>
@@ -71,7 +50,6 @@ gameLoop=()=>{
   render () {
     return (
       <div id="nfl-section">
-        <Nav />
         <div className="games-section">
           <div className ="title-headers">
               <div className ="game-header">
@@ -89,7 +67,7 @@ gameLoop=()=>{
             </div>
             {this.gameLoop()}
           </div>
-        <Gameselected gameSelected={this.state.gameSelected} handleChange={this.handleChange}/>
+
 
       </div>
     )

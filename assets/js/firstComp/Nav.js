@@ -13,15 +13,19 @@ export default class Nav extends Component {
   render () {
     return (
       <div id ="nav" >
+        <div className="account-dropdown">
+          <div className="logo"><i className="fa fa-user" aria-hidden="true"></i></div>
+          <div className="name">Angel Lopez</div>
+          <div className="icon"> <i className="fas fa-chevron-down"></i> </div>
+        </div>
         <nav>
-          <a href="/jquery/">Baseball</a>
-          <a href="/html/">Basketball</a>
-          <a href="/js/">Boxing</a>
-          <a href="/html/">Football</a>
-          <a href="/js/">Ice Hockey</a>
-          <a href="/css/">Soccer</a>
-          <a href="/jquery/">Tennis</a>
-          <a href="/css/">UFC/MMA</a>
+          <div><a href="/jquery/">Baseball</a></div>
+          <div><a href="/jquery/">Baseball</a></div>
+          <div><a href="/jquery/">Baseball</a></div>
+          <div><a href="/jquery/">Baseball</a></div>
+          <div><a href="/jquery/">Baseball</a></div>
+          <div><a href="/jquery/">Baseball</a></div>
+          <div><a href="/jquery/">Baseball</a></div>
       </nav>
       </div>)
   }
