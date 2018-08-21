@@ -15,11 +15,15 @@ gameLoop=()=>{
   return this.props.games.map((item)=>{
     return(
 <div className="games-container" key ={item.ID} onClick={()=>this.props.gameSelected(item)}>
+      <div className="games match-time">
+        <h5>{this.props.convertTime(item.MatchTime)}</h5>
+      </div>
       <div className ="gamelist" >
+
         <div className ="games teams">
           <h5 className="hometeam">{item.HomeTeam}</h5>
         </div>
-        <div className="games spread">
+        <div className="games spread" onClick={(e)=>this.props.wager(e,item)}>
           <h5>{item.Odds[0].PointSpreadHome}</h5>
         </div>
         <div className ="games moneyline">

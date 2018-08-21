@@ -1,6 +1,5 @@
 @import "reset";
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700');
-@import "header";
 
 body {
   font-family: 'Roboto', sans-serif;
@@ -9,30 +8,91 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(189,52,75,1);
-  background: -moz-linear-gradient(-45deg, rgba(189,52,75,1) 0%, rgba(8,36,64,1) 100%);
-  background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(189,52,75,1)), color-stop(100%, rgba(8,36,64,1)));
-  background: -webkit-linear-gradient(-45deg, rgba(189,52,75,1) 0%, rgba(8,36,64,1) 100%);
-  background: -o-linear-gradient(-45deg, rgba(189,52,75,1) 0%, rgba(8,36,64,1) 100%);
-  background: -ms-linear-gradient(-45deg, rgba(189,52,75,1) 0%, rgba(8,36,64,1) 100%);
-  background: linear-gradient(135deg, rgba(189,52,75,1) 0%, rgba(8,36,64,1) 100%);
+  background: rgba(15,32,39,1);
+  background: -moz-linear-gradient(-45deg, rgba(15,32,39,1) 0%, rgba(44,83,100,1) 100%);
+  background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(15,32,39,1)), color-stop(100%, rgba(44,83,100,1)));
+  background: -webkit-linear-gradient(-45deg, rgba(15,32,39,1) 0%, rgba(44,83,100,1) 100%);
+  background: -o-linear-gradient(-45deg, rgba(15,32,39,1) 0%, rgba(44,83,100,1) 100%);
+  background: -ms-linear-gradient(-45deg, rgba(15,32,39,1) 0%, rgba(44,83,100,1) 100%);
+  background: linear-gradient(135deg, rgba(15,32,39,1) 0%, rgba(44,83,100,1) 100%);
 }
 
 .app-container {
-  margin-top: 10rem;
   width: 100%;
+  width: 100vw;
   background: #fff;
   max-width: 1400px;
   min-height: calc(100vh - 15vh);
   border-radius: 5px;
   display: grid;
-  grid-template-columns: 15% 65% 20%;
+  grid-template-areas: 'header header header header header header' 'left middle middle middle middle right';
+  grid-gap: 10px;
+
+  #header {
+    grid-area: header;
+    position: relative;
+    height: 170px;
+    padding: 2rem 0;
+    width: 1400px;
+    background: linear-gradient(rgba(27,52,63,0.41), #050708) 0 0/cover,url(/img/background-main.jpg) center center no-repeat fixed;
+    background-size: cover;
+
+    .header-logo {
+      text-align: center;
+
+      img {
+        max-width: 100px;
+      }
+    }
+    // h1{
+    //   color: #f9f3f5;
+    //       font-size: 5em;
+    //       text-shadow: #333533 4px 4px 2px;
+    //       text-align: center;
+    //       letter-spacing: 5px;
+    //         background: rgba(255, 255, 255, 0.15);
+    // }
+    .account-section {
+      text-align: right;
+
+      span {
+        padding: 25px;
+        color: white;
+      }
+    }
+
+    .sport-icons {
+      display: none;
+      background: #ffffff8a;
+      padding: 20px;
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+
+      .sports-group {
+        display: flex;
+        justify-content: center;
+
+        img {
+          width: 50px;
+          height: 50px;
+          margin-right: 10rem;
+        }
+      }
+    }
+  }
 
   #nav {
+    grid-area: left;
+    padding: 10px;
+
     .account-dropdown {
       display: grid;
       grid-template-columns: 1fr 4fr 1fr;
-  padding: 15px 5px;
+      padding: 15px 5px;
+      -webkit-box-shadow: 0px 0px 15px -3px rgba(204,196,196,1);
+-moz-box-shadow: 0px 0px 15px -3px rgba(204,196,196,1);
+box-shadow: 0px 0px 15px -3px rgba(204,196,196,1);
 
       .logo {
         display: flex;
@@ -64,25 +124,42 @@ body {
     nav {
       display: flex;
       flex-direction: column;
+      align-items: center;
       background: #ffffff;
-      padding: 3rem;
-      min-width: 400px;
+      margin-top: 3rem;
 
-      a {
-        text-decoration: none;
-        color: #353232;
-        padding: 15px 10px;
-        line-height: 2;
+      .nav-links {
+        width: 100%;
+        text-align: center;
+        border: 1px solid #f3f3f3;
+        -webkit-box-shadow: 0px 0px 15px -3px rgba(224,220,220,1);
+-moz-box-shadow: 0px 0px 15px -3px rgba(224,220,220,1);
+box-shadow: 0px 0px 15px -3px rgba(224,220,220,1);
 
         &:hover {
-          color: orange;
+          background: #f3f3f3;
+        }
+
+        a {
+          text-decoration: none;
+          color: #353232;
+          display: block;
+          line-height: 4;
+          letter-spacing: 2px;
+
+          &:hover {
+            color: orange;
+          }
         }
       }
     }
   }
 
   #nfl-section {
+    grid-area: middle;
     background: #ededed;
+    border-left: 1px solid #e2d6d6;
+    overflow:hidden;
 
     .games-section {
       .title-headers {
@@ -91,6 +168,9 @@ body {
         text-align: center;
         font-size: 0.7em;
         margin-bottom: 0.5rem;
+        background: #1d3945;
+        color: white;
+        padding: 3px;
 
         .game-header {
           flex: 3;
@@ -110,14 +190,29 @@ body {
       }
 
       .games-container {
+        position:relative;
         background: white;
         display: flex;
         flex-direction: column;
         margin-bottom: 1rem;
         cursor: pointer;
-
+        -webkit-box-shadow: 0px 0px 15px -3px rgba(82,82,82,1);
+        -moz-box-shadow: 0px 0px 15px -3px rgba(82,82,82,1);
+        box-shadow: 0px 0px 15px -3px rgba(82,82,82,1);
         &:hover {
-          background: #ece7e7;
+          background: #b8d8e6;
+        }
+        .match-time{
+          position:absolute;
+          top: 20%;
+          left:10px;
+          background: #dde7ea;
+          border-radius: 3px;
+          h5{
+            font-size:.7em;
+            width:70px;
+            padding:5px;
+          }
         }
 
         .gamelist {
@@ -135,6 +230,7 @@ body {
               padding: 7px;
             }
           }
+
 
           .teams {
             flex: 3;
@@ -164,24 +260,36 @@ body {
   }
 
   #game-selected {
+    grid-area: right;
     background: #e4e0e0;
 
     h1 {
       color: #ffffff;
-  background: #4c924c;
-  font-size: 1.5rem;
-
-  text-align: center;
-}
+      background: #2a3e46;
+      font-size: 1.5rem;
+      text-align: center;
+      font-weight: 300;
+      padding:5px 0;
+    }
 
     button {
-      background: orange;
+      background: #406371;
       font-size: 1rem;
       text-align: center;
       max-width: 100%;
       width: 100%;
-      display: block;
-      margin: 0 auto;
+      padding: 15px 0;
+      color: white;
+      font-weight: 100;
+      letter-spacing: 1px;
+      border:none;
+      margin-bottom:1rem;
+      -webkit-box-shadow: 0px 7px 18px -2px rgba(179,170,170,1);
+      -moz-box-shadow: 0px 7px 18px -2px rgba(179,170,170,1);
+      box-shadow: 0px 7px 18px -2px rgba(179,170,170,1);
+      &:hover{
+        background:#45798e;
+      }
     }
 
     .games-selected {
@@ -196,7 +304,7 @@ body {
       }
 
       .game-title {
-        background: #99bb99;
+        background: #c5d2d8;
         padding: 10px;
 
         span {

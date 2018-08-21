@@ -7,6 +7,218 @@ webpackJsonp([0],{
 
 
 Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(14);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(15);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Nfl = function (_Component) {
+  _inherits(Nfl, _Component);
+
+  function Nfl() {
+    _classCallCheck(this, Nfl);
+
+    var _this = _possibleConstructorReturn(this, (Nfl.__proto__ || Object.getPrototypeOf(Nfl)).call(this));
+
+    _this.gameLoop = function () {
+      return _this.props.games.map(function (item) {
+        return _react2.default.createElement(
+          'div',
+          { className: 'games-container', key: item.ID, onClick: function onClick() {
+              return _this.props.gameSelected(item);
+            } },
+          _react2.default.createElement(
+            'div',
+            { className: 'games match-time' },
+            _react2.default.createElement(
+              'h5',
+              null,
+              _this.props.convertTime(item.MatchTime)
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'gamelist' },
+            _react2.default.createElement(
+              'div',
+              { className: 'games teams' },
+              _react2.default.createElement(
+                'h5',
+                { className: 'hometeam' },
+                item.HomeTeam
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'games spread', onClick: function onClick(e) {
+                  return _this.props.wager(e, item);
+                } },
+              _react2.default.createElement(
+                'h5',
+                null,
+                item.Odds[0].PointSpreadHome
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'games moneyline' },
+              _react2.default.createElement(
+                'h5',
+                null,
+                item.Odds[0].PointSpreadHomeLine
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'games total' },
+              _react2.default.createElement(
+                'h5',
+                null,
+                '0 ',
+                item.Odds[0].TotalNumber,
+                ' ( ',
+                item.Odds[0].OverLine,
+                ' )'
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'gamelist' },
+            _react2.default.createElement(
+              'div',
+              { className: 'games teams' },
+              _react2.default.createElement(
+                'h5',
+                null,
+                item.AwayTeam
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'games spread' },
+              _react2.default.createElement(
+                'h5',
+                null,
+                item.Odds[0].PointSpreadAway
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'games moneyline' },
+              _react2.default.createElement(
+                'h5',
+                null,
+                item.Odds[0].PointSpreadAwayLine
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'games total' },
+              _react2.default.createElement(
+                'h5',
+                null,
+                'U ',
+                item.Odds[0].TotalNumber,
+                ' ( ',
+                item.Odds[0].UnderLine,
+                ' )'
+              )
+            )
+          )
+        );
+      });
+    };
+
+    _this.state = {};
+    return _this;
+  }
+
+  _createClass(Nfl, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { id: 'nfl-section' },
+        _react2.default.createElement(
+          'div',
+          { className: 'games-section' },
+          _react2.default.createElement(
+            'div',
+            { className: 'title-headers' },
+            _react2.default.createElement(
+              'div',
+              { className: 'game-header' },
+              _react2.default.createElement(
+                'h5',
+                null,
+                'Team'
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'spread-header' },
+              _react2.default.createElement(
+                'h5',
+                null,
+                'Spread'
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'moneyline-header' },
+              _react2.default.createElement(
+                'h5',
+                null,
+                'MoneyLine'
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'overunder-header' },
+              _react2.default.createElement(
+                'h5',
+                null,
+                'Total'
+              )
+            )
+          ),
+          this.gameLoop()
+        )
+      );
+    }
+  }]);
+
+  return Nfl;
+}(_react.Component);
+
+exports.default = Nfl;
+
+/***/ }),
+
+/***/ 101:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 var nfldata = [{
@@ -831,7 +1043,7 @@ exports.default = nfldata;
 
 /***/ }),
 
-/***/ 102:
+/***/ 103:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -843,29 +1055,33 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(16);
+var _react = __webpack_require__(14);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(17);
+var _reactDom = __webpack_require__(15);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _nfldata = __webpack_require__(100);
+var _nfldata = __webpack_require__(101);
 
 var _nfldata2 = _interopRequireDefault(_nfldata);
 
-var _Nav = __webpack_require__(98);
+var _Nav = __webpack_require__(99);
 
 var _Nav2 = _interopRequireDefault(_Nav);
 
-var _Nfl = __webpack_require__(99);
+var _Nfl = __webpack_require__(100);
 
 var _Nfl2 = _interopRequireDefault(_Nfl);
 
 var _Gameselected = __webpack_require__(97);
 
 var _Gameselected2 = _interopRequireDefault(_Gameselected);
+
+var _Header = __webpack_require__(98);
+
+var _Header2 = _interopRequireDefault(_Header);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -877,8 +1093,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// import Header from './Header'
-
 var Layout = function (_Component) {
   _inherits(Layout, _Component);
 
@@ -886,6 +1100,11 @@ var Layout = function (_Component) {
     _classCallCheck(this, Layout);
 
     var _this = _possibleConstructorReturn(this, (Layout.__proto__ || Object.getPrototypeOf(Layout)).call(this));
+
+    _this.convertTime = function (convert) {
+      var date = new Date(convert);
+      return date.toLocaleString(); // "Wed Jun 29 2011 09:52:48 GMT-0700 (PDT)"
+    };
 
     _this.handleChange = function (name) {
       _this.setState({
@@ -906,9 +1125,32 @@ var Layout = function (_Component) {
       });
     };
 
+    _this.wagers = function (e, item) {
+      e.preventDefault();
+      console.log('The game chosen was', item.Details);
+      console.log(e.target.getAttribute('class'));
+      var line = e.target.firstChild.nodeValue;
+      console.log(_this.state.wagers);
+      var currentItem = _this.state.wagers;
+
+      var currentBet = {
+        ID: item.ID,
+        Details: item.Details,
+        PointSpreadHome: line
+      };
+      var allBets = [].concat(_toConsumableArray(currentItem), [currentBet]);
+      var names = [].concat(_toConsumableArray(new Set(allBets.map(function (a) {
+        return a;
+      }))));
+      _this.setState({
+        wagers: names
+      });
+    };
+
     _this.state = {
       nfldata: _nfldata2.default,
-      gameSelected: []
+      gameSelected: [],
+      wagers: []
     };
     return _this;
   }
@@ -919,9 +1161,10 @@ var Layout = function (_Component) {
       return _react2.default.createElement(
         'div',
         { className: 'app-container' },
+        _react2.default.createElement(_Header2.default, null),
         _react2.default.createElement(_Nav2.default, null),
-        _react2.default.createElement(_Nfl2.default, { games: this.state.nfldata, gameSelected: this.gameSelected }),
-        _react2.default.createElement(_Gameselected2.default, { gameSelected: this.state.gameSelected })
+        _react2.default.createElement(_Nfl2.default, { games: this.state.nfldata, gameSelected: this.gameSelected, convertTime: this.convertTime, wager: this.wagers }),
+        _react2.default.createElement(_Gameselected2.default, { gameSelected: this.state.gameSelected, handleChange: this.handleChange })
       );
     }
   }]);
@@ -950,11 +1193,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(16);
+var _react = __webpack_require__(14);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(17);
+var _reactDom = __webpack_require__(15);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -985,6 +1228,11 @@ var Gameselected = function (_Component) {
       // }
     };
 
+    _this.convertTime = function (convert) {
+      var date = new Date(convert);
+      return date.toLocaleString(); // "Wed Jun 29 2011 09:52:48 GMT-0700 (PDT)"
+    };
+
     _this.showme = function () {
       var games = _this.props.gameSelected;
       return games.map(function (item, index) {
@@ -1005,7 +1253,7 @@ var Gameselected = function (_Component) {
           _react2.default.createElement(
             'h5',
             null,
-            item.MatchTime,
+            _this.convertTime(item.MatchTime),
             ' '
           )
         );
@@ -1023,14 +1271,14 @@ var Gameselected = function (_Component) {
         'div',
         { id: 'game-selected' },
         _react2.default.createElement(
-          'h1',
-          null,
-          'Bet Slip'
-        ),
-        _react2.default.createElement(
           'button',
           null,
           'Continue to Wager Section'
+        ),
+        _react2.default.createElement(
+          'h1',
+          null,
+          'Bet Slip'
         ),
         this.showme()
       );
@@ -1056,11 +1304,86 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(16);
+var _react = __webpack_require__(14);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(17);
+var _reactDom = __webpack_require__(15);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Header = function (_Component) {
+  _inherits(Header, _Component);
+
+  function Header() {
+    _classCallCheck(this, Header);
+
+    var _this = _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this));
+
+    _this.state = {};
+    return _this;
+  }
+
+  _createClass(Header, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { id: 'header' },
+        _react2.default.createElement(
+          'div',
+          { className: 'header-logo' },
+          _react2.default.createElement('img', { src: './img/sportIcons/nflLogo.svg' })
+        ),
+        _react2.default.createElement('div', { className: 'account-section' }),
+        _react2.default.createElement(
+          'div',
+          { className: 'sport-icons' },
+          _react2.default.createElement(
+            'div',
+            { className: 'sports-group' },
+            _react2.default.createElement('img', { src: '/img/sportIcons/soccer.svg' }),
+            _react2.default.createElement('img', { src: '/img/sportIcons/football.svg' }),
+            _react2.default.createElement('img', { src: '/img/sportIcons/mma.svg' }),
+            _react2.default.createElement('img', { src: '/img/sportIcons/baseball.svg' })
+          )
+        )
+      );
+    }
+  }]);
+
+  return Header;
+}(_react.Component);
+
+exports.default = Header;
+
+/***/ }),
+
+/***/ 99:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(14);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(15);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -1101,7 +1424,7 @@ var Nav = function (_Component) {
           _react2.default.createElement(
             'div',
             { className: 'name' },
-            'Angel Lopez'
+            'Tuff Fish'
           ),
           _react2.default.createElement(
             'div',
@@ -1116,7 +1439,7 @@ var Nav = function (_Component) {
           null,
           _react2.default.createElement(
             'div',
-            null,
+            { className: 'nav-links' },
             _react2.default.createElement(
               'a',
               { href: '/jquery/' },
@@ -1125,56 +1448,65 @@ var Nav = function (_Component) {
           ),
           _react2.default.createElement(
             'div',
-            null,
+            { className: 'nav-links' },
             _react2.default.createElement(
               'a',
               { href: '/jquery/' },
-              'Baseball'
+              'Basketball'
             )
           ),
           _react2.default.createElement(
             'div',
-            null,
+            { className: 'nav-links' },
             _react2.default.createElement(
               'a',
               { href: '/jquery/' },
-              'Baseball'
+              'Boxing'
             )
           ),
           _react2.default.createElement(
             'div',
-            null,
+            { className: 'nav-links' },
             _react2.default.createElement(
               'a',
               { href: '/jquery/' },
-              'Baseball'
+              'Football'
             )
           ),
           _react2.default.createElement(
             'div',
-            null,
+            { className: 'nav-links' },
             _react2.default.createElement(
               'a',
               { href: '/jquery/' },
-              'Baseball'
+              'Ice Hockey'
             )
           ),
           _react2.default.createElement(
             'div',
-            null,
+            { className: 'nav-links' },
             _react2.default.createElement(
               'a',
               { href: '/jquery/' },
-              'Baseball'
+              'Soccer'
             )
           ),
           _react2.default.createElement(
             'div',
-            null,
+            { className: 'nav-links' },
             _react2.default.createElement(
               'a',
               { href: '/jquery/' },
-              'Baseball'
+              'Tennis'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'nav-links' },
+            _react2.default.createElement(
+              'a',
+              { href: '/jquery/' },
+              'UFC/MMA'
             )
           )
         )
@@ -1187,207 +1519,6 @@ var Nav = function (_Component) {
 
 exports.default = Nav;
 
-/***/ }),
-
-/***/ 99:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(16);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(17);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Nfl = function (_Component) {
-  _inherits(Nfl, _Component);
-
-  function Nfl() {
-    _classCallCheck(this, Nfl);
-
-    var _this = _possibleConstructorReturn(this, (Nfl.__proto__ || Object.getPrototypeOf(Nfl)).call(this));
-
-    _this.gameLoop = function () {
-      return _this.props.games.map(function (item) {
-        return _react2.default.createElement(
-          'div',
-          { className: 'games-container', key: item.ID, onClick: function onClick() {
-              return _this.props.gameSelected(item);
-            } },
-          _react2.default.createElement(
-            'div',
-            { className: 'gamelist' },
-            _react2.default.createElement(
-              'div',
-              { className: 'games teams' },
-              _react2.default.createElement(
-                'h5',
-                { className: 'hometeam' },
-                item.HomeTeam
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'games spread' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                item.Odds[0].PointSpreadHome
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'games moneyline' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                item.Odds[0].PointSpreadHomeLine
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'games total' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                '0 ',
-                item.Odds[0].TotalNumber,
-                ' ( ',
-                item.Odds[0].OverLine,
-                ' )'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'gamelist' },
-            _react2.default.createElement(
-              'div',
-              { className: 'games teams' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                item.AwayTeam
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'games spread' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                item.Odds[0].PointSpreadAway
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'games moneyline' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                item.Odds[0].PointSpreadAwayLine
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'games total' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                'U ',
-                item.Odds[0].TotalNumber,
-                ' ( ',
-                item.Odds[0].UnderLine,
-                ' )'
-              )
-            )
-          )
-        );
-      });
-    };
-
-    _this.state = {};
-    return _this;
-  }
-
-  _createClass(Nfl, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        { id: 'nfl-section' },
-        _react2.default.createElement(
-          'div',
-          { className: 'games-section' },
-          _react2.default.createElement(
-            'div',
-            { className: 'title-headers' },
-            _react2.default.createElement(
-              'div',
-              { className: 'game-header' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                'Team'
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'spread-header' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                'Spread'
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'moneyline-header' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                'MoneyLine'
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'overunder-header' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                'Total'
-              )
-            )
-          ),
-          this.gameLoop()
-        )
-      );
-    }
-  }]);
-
-  return Nfl;
-}(_react.Component);
-
-exports.default = Nfl;
-
 /***/ })
 
-},[102]);
+},[103]);

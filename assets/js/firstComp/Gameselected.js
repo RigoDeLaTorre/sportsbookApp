@@ -19,6 +19,11 @@ handleChange = (item)=>{
   //   console.log('new game added')
   // }
 }
+
+convertTime =(convert)=>{
+  let date = new Date(convert);
+return date.toLocaleString() // "Wed Jun 29 2011 09:52:48 GMT-0700 (PDT)"
+}
 showme=()=>{
   let games = this.props.gameSelected;
   return games.map((item,index)=>{
@@ -27,7 +32,7 @@ showme=()=>{
         <div className="game-title">
             <span>{item.Details}</span>
         </div>
-        <h5>{item.MatchTime} </h5>
+        <h5>{this.convertTime(item.MatchTime)} </h5>
       </div>
     )
 
@@ -37,8 +42,8 @@ showme=()=>{
   render () {
     return (
       <div id ="game-selected" >
-        <h1>Bet Slip</h1>
         <button>Continue to Wager Section</button>
+        <h1>Bet Slip</h1>
         {this.showme()}
       </div>)
   }

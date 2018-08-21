@@ -13,9 +13,11 @@ export default class Header extends Component {
   render () {
     return (
       <div id ="header" >
+      <div className="header-logo">
+      <img src = "./img/sportIcons/nflLogo.svg"/>
+      </div>
         <div className = "account-section">
-          <span>Angel Lopez</span>
-          <span>Account Balance $429.85</span>
+
         </div>
         <div className="sport-icons">
           <div className="sports-group">
