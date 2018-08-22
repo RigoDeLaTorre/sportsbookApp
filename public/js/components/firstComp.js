@@ -61,41 +61,36 @@ var Nfl = function (_Component) {
               _react2.default.createElement(
                 'h5',
                 { className: 'hometeam' },
-                item.HomeTeam
+                item.AwayTeam
               )
             ),
             _react2.default.createElement(
-              'div',
-              { className: 'games spread', onClick: function onClick(e) {
-                  return _this.props.wager(e, item);
+              'h5',
+              { className: 'spread', onClick: function onClick(e) {
+                  return _this.props.wagersAwaySpread(item);
                 } },
-              _react2.default.createElement(
-                'h5',
-                null,
-                item.Odds[0].PointSpreadHome
-              )
+              item.Odds[0].PointSpreadAway,
+              ' (',
+              item.Odds[0].PointSpreadAwayLine,
+              ')'
             ),
             _react2.default.createElement(
-              'div',
-              { className: 'games moneyline' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                item.Odds[0].PointSpreadHomeLine
-              )
+              'h5',
+              { className: 'moneyline', onClick: function onClick(e) {
+                  return _this.props.wagersAwayMoneyLine(item);
+                } },
+              item.Odds[0].MoneyLineAway
             ),
             _react2.default.createElement(
-              'div',
-              { className: 'games total' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                '0 ',
-                item.Odds[0].TotalNumber,
-                ' ( ',
-                item.Odds[0].OverLine,
-                ' )'
-              )
+              'h5',
+              { className: 'total', onClick: function onClick(e) {
+                  return _this.props.wagersAwayTotalOver(item);
+                } },
+              '0 ',
+              item.Odds[0].TotalNumber,
+              ' ( ',
+              item.Odds[0].OverLine,
+              ' )'
             )
           ),
           _react2.default.createElement(
@@ -106,40 +101,37 @@ var Nfl = function (_Component) {
               { className: 'games teams' },
               _react2.default.createElement(
                 'h5',
-                null,
-                item.AwayTeam
+                { className: 'hometeam' },
+                item.HomeTeam
               )
             ),
             _react2.default.createElement(
-              'div',
-              { className: 'games spread' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                item.Odds[0].PointSpreadAway
-              )
+              'h5',
+              { className: 'spread', onClick: function onClick(e) {
+                  return _this.props.wagersHomeSpread(item);
+                } },
+              item.Odds[0].PointSpreadHome,
+              ' (',
+              item.Odds[0].PointSpreadHomeLine,
+              ')'
             ),
             _react2.default.createElement(
-              'div',
-              { className: 'games moneyline' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                item.Odds[0].PointSpreadAwayLine
-              )
+              'h5',
+              { className: 'moneyline', onClick: function onClick(e) {
+                  return _this.props.wagersHomeMoneyLine(item);
+                } },
+              item.Odds[0].MoneyLineHome
             ),
             _react2.default.createElement(
-              'div',
-              { className: 'games total' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                'U ',
-                item.Odds[0].TotalNumber,
-                ' ( ',
-                item.Odds[0].UnderLine,
-                ' )'
-              )
+              'h5',
+              { className: 'total', onClick: function onClick(e) {
+                  return _this.props.wagersHomeTotalUnder(item);
+                } },
+              'U ',
+              item.Odds[0].TotalNumber,
+              ' ( ',
+              item.Odds[0].UnderLine,
+              ' )'
             )
           )
         );
@@ -1085,6 +1077,8 @@ var _Header2 = _interopRequireDefault(_Header);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1125,25 +1119,149 @@ var Layout = function (_Component) {
       });
     };
 
-    _this.wagers = function (e, item) {
-      e.preventDefault();
-      console.log('The game chosen was', item.Details);
-      console.log(e.target.getAttribute('class'));
-      var line = e.target.firstChild.nodeValue;
-      console.log(_this.state.wagers);
-      var currentItem = _this.state.wagers;
+    _this.wagersHomeSpread = function (item) {
+      var currentWagers = _this.state.wagers;
+      var line = item.Odds[0].PointSpreadHome;
+      var juice = item.Odds[0].PointSpreadHomeLine;
+      var teamChosen = item.HomeTeam;
+      var matchTime = item.MatchTime;
+      var currentBet = {
+        ID: item.ID,
+        Details: item.Details,
+        teamChosen: teamChosen,
+        wagerType: "spread",
+        juice: juice,
+        line: line,
+        matchTime: matchTime
+      };
+      var allBets = [].concat(_toConsumableArray(currentWagers), [currentBet]);
+      var allUniqueBets = [].concat(_toConsumableArray(new Set(allBets.map(function (a) {
+        return a;
+      }))));
+      _this.setState({
+        wagers: allUniqueBets
+      });
+    };
+
+    _this.wagersHomeMoneyLine = function (item) {
+      var currentWagers = _this.state.wagers;
+      var line = item.Odds[0].MoneyLineHome;
+      var juice = item.Odds[0].MoneyLineHome;
+      var teamChosen = item.HomeTeam;
+      var matchTime = item.MatchTime;
+      var currentBet = {
+        ID: item.ID,
+        Details: item.Details,
+        teamChosen: teamChosen,
+        wagerType: "moneyline",
+        juice: juice,
+        line: line,
+        matchTime: matchTime
+      };
+      var allBets = [].concat(_toConsumableArray(currentWagers), [currentBet]);
+      var allUniqueBets = [].concat(_toConsumableArray(new Set(allBets.map(function (a) {
+        return a;
+      }))));
+      _this.setState({
+        wagers: allUniqueBets
+      });
+    };
+
+    _this.wagersHomeTotalUnder = function (item) {
+      var currentWagers = _this.state.wagers;
+      var line = item.Odds[0].TotalNumber;
+      var juice = item.Odds[0].UnderLine;
+      var teamChosen = item.HomeTeam;
+      var matchTime = item.MatchTime;;
+      var currentBet = {
+        ID: item.ID,
+        Details: item.Details,
+        teamChosen: "under",
+        wagerType: "total",
+        juice: juice,
+        line: line,
+        matchTime: matchTime
+
+      };
+      var allBets = [].concat(_toConsumableArray(currentWagers), [currentBet]);
+      var allUniqueBets = [].concat(_toConsumableArray(new Set(allBets.map(function (a) {
+        return a;
+      }))));
+      _this.setState({
+        wagers: allUniqueBets
+      });
+    };
+
+    _this.wagersAwaySpread = function (item) {
+      var currentWagers = _this.state.wagers;
+      var line = item.Odds[0].PointSpreadAway;
+      var juice = item.Odds[0].PointSpreadAwayLine;
+      var teamChosen = item.AwayTeam;
+      var matchTime = item.MatchTime;
+      var currentBet = {
+        ID: item.ID,
+        Details: item.Details,
+        teamChosen: teamChosen,
+        wagerType: "spread",
+        juice: juice,
+        line: line,
+        matchTime: matchTime
+      };
+      var allBets = [].concat(_toConsumableArray(currentWagers), [currentBet]);
+      var allUniqueBets = [].concat(_toConsumableArray(new Set(allBets.map(function (a) {
+        return a;
+      }))));
+      _this.setState({
+        wagers: allUniqueBets
+      });
+    };
+
+    _this.wagersAwayMoneyLine = function (item) {
+      var currentWagers = _this.state.wagers;
+      var line = item.Odds[0].MoneyLineAway;
+      var juice = item.Odds[0].MoneyLineAway;
+      var teamChosen = item.AwayTeam;
+      var matchTime = item.MatchTime;
+      var currentBet = {
+        ID: item.ID,
+        Details: item.Details,
+        teamChosen: teamChosen,
+        wagerType: "moneyline",
+        juice: juice,
+        line: line,
+        matchTime: matchTime
+      };
+      var allBets = [].concat(_toConsumableArray(currentWagers), [currentBet]);
+      var allUniqueBets = [].concat(_toConsumableArray(new Set(allBets.map(function (a) {
+        return a;
+      }))));
+      _this.setState({
+        wagers: allUniqueBets
+      });
+    };
+
+    _this.wagersAwayTotalOver = function (item) {
+      var currentWagers = _this.state.wagers;
+      var line = item.Odds[0].TotalNumber;
+      var juice = item.Odds[0].OverLine;
+      var teamChosen = item.AwayTeam;
+      var matchTime = item.MatchTime;
 
       var currentBet = {
         ID: item.ID,
         Details: item.Details,
-        PointSpreadHome: line
+        teamChosen: "over",
+        wagerType: "total",
+        juice: juice,
+        line: line,
+        matchTime: matchTime
       };
-      var allBets = [].concat(_toConsumableArray(currentItem), [currentBet]);
-      var names = [].concat(_toConsumableArray(new Set(allBets.map(function (a) {
+      var allBets = [].concat(_toConsumableArray(currentWagers), [currentBet]);
+      var allUniqueBets = [].concat(_toConsumableArray(new Set(allBets.map(function (a) {
         return a;
       }))));
       _this.setState({
-        wagers: names
+        wagers: allUniqueBets
       });
     };
 
@@ -1155,6 +1273,12 @@ var Layout = function (_Component) {
     return _this;
   }
 
+  //NFL Home Teams
+
+
+  // NFL Away teams
+
+
   _createClass(Layout, [{
     key: 'render',
     value: function render() {
@@ -1163,8 +1287,17 @@ var Layout = function (_Component) {
         { className: 'app-container' },
         _react2.default.createElement(_Header2.default, null),
         _react2.default.createElement(_Nav2.default, null),
-        _react2.default.createElement(_Nfl2.default, { games: this.state.nfldata, gameSelected: this.gameSelected, convertTime: this.convertTime, wager: this.wagers }),
-        _react2.default.createElement(_Gameselected2.default, { gameSelected: this.state.gameSelected, handleChange: this.handleChange })
+        _react2.default.createElement(_Nfl2.default, _defineProperty({ games: this.state.nfldata,
+          gameSelected: this.gameSelected,
+          convertTime: this.convertTime,
+          wagersHomeSpread: this.wagersHomeSpread,
+          wagersHomeMoneyLine: this.wagersHomeMoneyLine,
+          wagersHomeTotalUnder: this.wagersHomeTotalUnder,
+          wagersAwaySpread: this.wagersAwaySpread,
+          wagersAwayMoneyLine: this.wagersAwayMoneyLine,
+          wagersAwayTotalOver: this.wagersAwayTotalOver
+        }, 'convertTime', this.convertTime)),
+        _react2.default.createElement(_Gameselected2.default, { gameSelected: this.state.gameSelected, handleChange: this.handleChange, wagers: this.state.wagers })
       );
     }
   }]);
@@ -1234,27 +1367,58 @@ var Gameselected = function (_Component) {
     };
 
     _this.showme = function () {
-      var games = _this.props.gameSelected;
-      return games.map(function (item, index) {
+      var games = _this.props.wagers;
+      return games.map(function (item, i) {
         return _react2.default.createElement(
           'div',
-          { className: 'games-selected', key: item.ID, onClick: function onClick() {
+          { className: 'game-selected-container', key: i, onClick: function onClick() {
               return _this.handleChange(item);
             } },
           _react2.default.createElement(
             'div',
-            { className: 'game-title' },
+            { className: 'bet-container' },
+            _react2.default.createElement(
+              'div',
+              { className: 'bet-chosen' },
+              _react2.default.createElement(
+                'span',
+                { className: 'teamChozen' },
+                item.teamChosen,
+                '  ',
+                item.line > 0 && item.wagerType === 'moneyline' || item.line > 0 && item.wagerType === 'spread' ? '+ ' + item.line : item.line,
+                ' '
+              ),
+              _react2.default.createElement(
+                'span',
+                { className: 'wager-type' },
+                item.wagerType
+              )
+            ),
             _react2.default.createElement(
               'span',
-              null,
-              item.Details
+              { className: 'wager-type' },
+              item.wagerType === 'moneyline' ? '' : item.juice
             )
           ),
           _react2.default.createElement(
-            'h5',
-            null,
-            _this.convertTime(item.MatchTime),
-            ' '
+            'div',
+            { className: 'match-container' },
+            _react2.default.createElement(
+              'span',
+              { className: 'game' },
+              item.Details
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'match-time' },
+              _this.convertTime(item.matchTime)
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'wager-amount' },
+            _react2.default.createElement('input', { type: 'text', name: 'fname' }),
+            _react2.default.createElement('input', { type: 'text', name: 'fname' })
           )
         );
       });

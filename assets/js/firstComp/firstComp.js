@@ -35,25 +35,145 @@ export default class Layout extends Component {
         gameSelected:names
       })
     }
-    wagers = (e,item)=>{
-      e.preventDefault()
-      console.log('The game chosen was', item.Details)
-      console.log(e.target.getAttribute('class'))
-    let line = e.target.firstChild.nodeValue
-    console.log(this.state.wagers)
-      let currentItem = this.state.wagers
 
+
+//NFL Home Teams
+    wagersHomeSpread = (item)=>{
+      let currentWagers = this.state.wagers
+      let line =item.Odds[0].PointSpreadHome
+      let juice =item.Odds[0].PointSpreadHomeLine
+      let teamChosen=item.HomeTeam;
+      let matchTime=item.MatchTime;
       let currentBet ={
       ID:item.ID,
       Details:item.Details,
-      PointSpreadHome:line
+      teamChosen:teamChosen,
+      wagerType:"spread",
+      juice:juice,
+      line:line,
+      matchTime:matchTime
       }
-      let allBets = [...currentItem, currentBet]
-        let names = [...new Set(allBets.map(a => a))];
+      let allBets = [...currentWagers, currentBet]
+        let allUniqueBets = [...new Set(allBets.map(a => a))];
       this.setState({
-        wagers:names
+        wagers:allUniqueBets
       })
     }
+
+    wagersHomeMoneyLine = (item)=>{
+      let currentWagers = this.state.wagers
+      let line =item.Odds[0].MoneyLineHome
+      let juice =item.Odds[0].MoneyLineHome
+      let teamChosen=item.HomeTeam;
+      let matchTime=item.MatchTime;
+      let currentBet ={
+      ID:item.ID,
+      Details:item.Details,
+      teamChosen:teamChosen,
+      wagerType:"moneyline",
+      juice:juice,
+      line:line,
+      matchTime:matchTime
+      }
+      let allBets = [...currentWagers, currentBet]
+        let allUniqueBets = [...new Set(allBets.map(a => a))];
+      this.setState({
+        wagers:allUniqueBets
+      })
+    }
+
+    wagersHomeTotalUnder = (item)=>{
+      let currentWagers = this.state.wagers
+      let line =item.Odds[0].TotalNumber
+      let juice =item.Odds[0].UnderLine
+      let teamChosen=item.HomeTeam;
+      let matchTime=item.MatchTime;;
+      let currentBet ={
+      ID:item.ID,
+      Details:item.Details,
+      teamChosen:"under",
+      wagerType:"total",
+      juice:juice,
+      line:line,
+      matchTime:matchTime
+
+      }
+      let allBets = [...currentWagers, currentBet]
+        let allUniqueBets = [...new Set(allBets.map(a => a))];
+      this.setState({
+        wagers:allUniqueBets
+      })
+    }
+
+
+// NFL Away teams
+wagersAwaySpread = (item)=>{
+  let currentWagers = this.state.wagers
+  let line =item.Odds[0].PointSpreadAway
+  let juice =item.Odds[0].PointSpreadAwayLine
+  let teamChosen=item.AwayTeam;
+  let matchTime=item.MatchTime;
+  let currentBet ={
+  ID:item.ID,
+  Details:item.Details,
+  teamChosen:teamChosen,
+  wagerType:"spread",
+  juice:juice,
+  line:line,
+  matchTime:matchTime
+  }
+  let allBets = [...currentWagers, currentBet]
+    let allUniqueBets = [...new Set(allBets.map(a => a))];
+  this.setState({
+    wagers:allUniqueBets
+  })
+}
+
+wagersAwayMoneyLine = (item)=>{
+  let currentWagers = this.state.wagers
+  let line =item.Odds[0].MoneyLineAway
+  let juice =item.Odds[0].MoneyLineAway
+  let teamChosen=item.AwayTeam;
+  let matchTime=item.MatchTime;
+  let currentBet ={
+  ID:item.ID,
+  Details:item.Details,
+  teamChosen:teamChosen,
+  wagerType:"moneyline",
+  juice:juice,
+  line:line,
+  matchTime:matchTime
+  }
+  let allBets = [...currentWagers, currentBet]
+    let allUniqueBets = [...new Set(allBets.map(a => a))];
+  this.setState({
+    wagers:allUniqueBets
+  })
+}
+
+wagersAwayTotalOver = (item)=>{
+  let currentWagers = this.state.wagers
+  let line =item.Odds[0].TotalNumber
+  let juice =item.Odds[0].OverLine
+  let teamChosen=item.AwayTeam;
+  let matchTime=item.MatchTime;
+
+  let currentBet ={
+  ID:item.ID,
+  Details:item.Details,
+  teamChosen:"over",
+  wagerType:"total",
+  juice:juice,
+  line:line,
+  matchTime:matchTime
+  }
+  let allBets = [...currentWagers, currentBet]
+    let allUniqueBets = [...new Set(allBets.map(a => a))];
+  this.setState({
+    wagers:allUniqueBets
+  })
+}
+
 
   render () {
     return (
@@ -61,8 +181,17 @@ export default class Layout extends Component {
       <div className='app-container'>
           <Header />
           <Nav />
-          <Nfl games={this.state.nfldata} gameSelected={this.gameSelected} convertTime={this.convertTime} wager={this.wagers}/>
-          <Gameselected gameSelected={this.state.gameSelected} handleChange={this.handleChange} />
+          <Nfl games={this.state.nfldata}
+          gameSelected={this.gameSelected}
+          convertTime={this.convertTime}
+          wagersHomeSpread={this.wagersHomeSpread}
+          wagersHomeMoneyLine={this.wagersHomeMoneyLine}
+          wagersHomeTotalUnder ={this.wagersHomeTotalUnder}
+          wagersAwaySpread={this.wagersAwaySpread}
+          wagersAwayMoneyLine={this.wagersAwayMoneyLine}
+          wagersAwayTotalOver ={this.wagersAwayTotalOver}
+          convertTime={this.convertTime}/>
+          <Gameselected gameSelected={this.state.gameSelected} handleChange={this.handleChange} wagers={this.state.wagers}/>
       </div>
 
     )

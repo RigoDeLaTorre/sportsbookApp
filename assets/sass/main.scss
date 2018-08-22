@@ -228,6 +228,7 @@ box-shadow: 0px 0px 15px -3px rgba(224,220,220,1);
             h5 {
               font-size: 0.8em;
               padding: 7px;
+
             }
           }
 
@@ -240,19 +241,12 @@ box-shadow: 0px 0px 15px -3px rgba(224,220,220,1);
             }
           }
 
-          .spread {
+          .spread,.moneyline,.total {
             border: 1px solid #e6dcdc;
             flex: 1;
-          }
-
-          .moneyline {
-            flex: 1;
-            border: 1px solid #e6dcdc;
-          }
-
-          .total {
-            flex: 1;
-            border: 1px solid #e6dcdc;
+            text-align: center;
+            font-size: 0.8em;
+            padding: 7px;
           }
         }
       }
@@ -292,31 +286,49 @@ box-shadow: 0px 0px 15px -3px rgba(224,220,220,1);
       }
     }
 
-    .games-selected {
-      font-size: 0.8em;
-      margin-bottom: 1rem;
-      color: #364250;
-      background: white;
-      font-weight: 500;
+.game-selected-container{
+  background:white;
+  padding:15px;
+  margin-bottom:2rem;
+  .bet-container{
+      margin-bottom:.5rem;
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
 
-      &:hover {
-        background: #eac5c5;
+    .bet-chosen{
+      display:flex;
+      flex-direction:column;
+
+      .teamChozen{
+        font-weight:700;
+        margin-right:5px;
+        text-transform: capitalize;
       }
 
-      .game-title {
-        background: #c5d2d8;
-        padding: 10px;
-
-        span {
-          color: black;
-        }
-      }
-
-      h5 {
-        margin-top: 1rem;
-        font-weight: 300;
-        padding: 10px;
-      }
     }
+    .wager-type{
+      font-weight:300;
+      font-size:.8em;
+      text-transform: capitalize;
+    }
+  }
+  .match-container{
+    display:flex;
+    flex-direction:column;
+    .game{
+      color: #406371;
+    font-size: .8em;
+    }
+    .match-time{
+      font-size:.7em;
+      font-weight:300;
+      color:gray;
+
+    }
+  }
+
+}
+
   }
 }
