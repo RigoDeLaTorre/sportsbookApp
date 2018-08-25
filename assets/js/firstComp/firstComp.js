@@ -12,9 +12,31 @@ export default class Layout extends Component {
     this.state = {
       nfldata:nfldata,
       gameSelected:[],
-      wagers:[]
     }
   }
+
+  handleBetRisk= (item, win,bet) =>{
+  this.setState(state => ({
+    gameSelected: state.gameSelected.map(i => {
+      if (i === item) {
+        return { ...i, win: win, risk:bet};
+      } else {
+        return i;
+      }
+    })
+  }));
+}
+
+
+
+  //
+  // confirmedWagers = (item)=>{
+  //   let currentState = [...this.state.gameSelected, item]
+  //   let allUniqueBets = [...new Set(currentState.map(a => a))];
+  //   this.setState({
+  //     gameSelected:allUniqueBets
+  //   })
+  // }
   convertTime =(convert)=>{
     let date = new Date(convert);
   return date.toLocaleString() // "Wed Jun 29 2011 09:52:48 GMT-0700 (PDT)"
@@ -39,7 +61,7 @@ export default class Layout extends Component {
 
 //NFL Home Teams
     wagersHomeSpread = (item)=>{
-      let currentWagers = this.state.wagers
+      let currentWagers = this.state.gameSelected
       let line =item.Odds[0].PointSpreadHome
       let juice =item.Odds[0].PointSpreadHomeLine
       let teamChosen=item.HomeTeam;
@@ -51,17 +73,20 @@ export default class Layout extends Component {
       wagerType:"spread",
       juice:juice,
       line:line,
-      matchTime:matchTime
+      matchTime:matchTime,
+      risk:'',
+      win:''
+
       }
       let allBets = [...currentWagers, currentBet]
         let allUniqueBets = [...new Set(allBets.map(a => a))];
       this.setState({
-        wagers:allUniqueBets
+        gameSelected:allUniqueBets
       })
     }
 
     wagersHomeMoneyLine = (item)=>{
-      let currentWagers = this.state.wagers
+      let currentWagers = this.state.gameSelected
       let line =item.Odds[0].MoneyLineHome
       let juice =item.Odds[0].MoneyLineHome
       let teamChosen=item.HomeTeam;
@@ -73,17 +98,19 @@ export default class Layout extends Component {
       wagerType:"moneyline",
       juice:juice,
       line:line,
-      matchTime:matchTime
+      matchTime:matchTime,
+      risk:'',
+      win:''
       }
       let allBets = [...currentWagers, currentBet]
         let allUniqueBets = [...new Set(allBets.map(a => a))];
       this.setState({
-        wagers:allUniqueBets
+        gameSelected:allUniqueBets
       })
     }
 
     wagersHomeTotalUnder = (item)=>{
-      let currentWagers = this.state.wagers
+      let currentWagers = this.state.gameSelected
       let line =item.Odds[0].TotalNumber
       let juice =item.Odds[0].UnderLine
       let teamChosen=item.HomeTeam;
@@ -95,20 +122,22 @@ export default class Layout extends Component {
       wagerType:"total",
       juice:juice,
       line:line,
-      matchTime:matchTime
+      matchTime:matchTime,
+      risk:'',
+      win:''
 
       }
       let allBets = [...currentWagers, currentBet]
         let allUniqueBets = [...new Set(allBets.map(a => a))];
       this.setState({
-        wagers:allUniqueBets
+          gameSelected:allUniqueBets
       })
     }
 
 
 // NFL Away teams
 wagersAwaySpread = (item)=>{
-  let currentWagers = this.state.wagers
+  let currentWagers = this.state.gameSelected
   let line =item.Odds[0].PointSpreadAway
   let juice =item.Odds[0].PointSpreadAwayLine
   let teamChosen=item.AwayTeam;
@@ -120,17 +149,19 @@ wagersAwaySpread = (item)=>{
   wagerType:"spread",
   juice:juice,
   line:line,
-  matchTime:matchTime
+  matchTime:matchTime,
+  risk:'',
+  win:''
   }
   let allBets = [...currentWagers, currentBet]
     let allUniqueBets = [...new Set(allBets.map(a => a))];
   this.setState({
-    wagers:allUniqueBets
+    gameSelected:allUniqueBets
   })
 }
 
 wagersAwayMoneyLine = (item)=>{
-  let currentWagers = this.state.wagers
+    let currentWagers = this.state.gameSelected
   let line =item.Odds[0].MoneyLineAway
   let juice =item.Odds[0].MoneyLineAway
   let teamChosen=item.AwayTeam;
@@ -142,17 +173,21 @@ wagersAwayMoneyLine = (item)=>{
   wagerType:"moneyline",
   juice:juice,
   line:line,
-  matchTime:matchTime
+  matchTime:matchTime,
+  risk:'',
+  win:'',
+  risk:'',
+  win:''
   }
   let allBets = [...currentWagers, currentBet]
     let allUniqueBets = [...new Set(allBets.map(a => a))];
   this.setState({
-    wagers:allUniqueBets
+    gameSelected:allUniqueBets
   })
 }
 
 wagersAwayTotalOver = (item)=>{
-  let currentWagers = this.state.wagers
+  let currentWagers = this.state.gameSelected
   let line =item.Odds[0].TotalNumber
   let juice =item.Odds[0].OverLine
   let teamChosen=item.AwayTeam;
@@ -165,12 +200,14 @@ wagersAwayTotalOver = (item)=>{
   wagerType:"total",
   juice:juice,
   line:line,
-  matchTime:matchTime
+  matchTime:matchTime,
+  risk:'',
+  win:''
   }
   let allBets = [...currentWagers, currentBet]
     let allUniqueBets = [...new Set(allBets.map(a => a))];
   this.setState({
-    wagers:allUniqueBets
+    gameSelected:allUniqueBets
   })
 }
 
@@ -190,8 +227,13 @@ wagersAwayTotalOver = (item)=>{
           wagersAwaySpread={this.wagersAwaySpread}
           wagersAwayMoneyLine={this.wagersAwayMoneyLine}
           wagersAwayTotalOver ={this.wagersAwayTotalOver}
-          convertTime={this.convertTime}/>
-          <Gameselected gameSelected={this.state.gameSelected} handleChange={this.handleChange} wagers={this.state.wagers}/>
+          convertTime={this.convertTime}
+        />
+          <Gameselected gameSelected={this.state.gameSelected}
+          handleChange={this.handleChange}
+           wagers={this.state.wagers}
+           handleBetRisk={this.handleBetRisk}
+           />
       </div>
 
     )

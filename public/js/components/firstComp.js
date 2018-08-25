@@ -40,9 +40,7 @@ var Nfl = function (_Component) {
       return _this.props.games.map(function (item) {
         return _react2.default.createElement(
           'div',
-          { className: 'games-container', key: item.ID, onClick: function onClick() {
-              return _this.props.gameSelected(item);
-            } },
+          { className: 'games-container', key: item.ID },
           _react2.default.createElement(
             'div',
             { className: 'games match-time' },
@@ -1045,6 +1043,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(14);
@@ -1095,6 +1095,20 @@ var Layout = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (Layout.__proto__ || Object.getPrototypeOf(Layout)).call(this));
 
+    _this.handleBetRisk = function (item, win, bet) {
+      _this.setState(function (state) {
+        return {
+          gameSelected: state.gameSelected.map(function (i) {
+            if (i === item) {
+              return _extends({}, i, { win: win, risk: bet });
+            } else {
+              return i;
+            }
+          })
+        };
+      });
+    };
+
     _this.convertTime = function (convert) {
       var date = new Date(convert);
       return date.toLocaleString(); // "Wed Jun 29 2011 09:52:48 GMT-0700 (PDT)"
@@ -1120,7 +1134,7 @@ var Layout = function (_Component) {
     };
 
     _this.wagersHomeSpread = function (item) {
-      var currentWagers = _this.state.wagers;
+      var currentWagers = _this.state.gameSelected;
       var line = item.Odds[0].PointSpreadHome;
       var juice = item.Odds[0].PointSpreadHomeLine;
       var teamChosen = item.HomeTeam;
@@ -1132,19 +1146,22 @@ var Layout = function (_Component) {
         wagerType: "spread",
         juice: juice,
         line: line,
-        matchTime: matchTime
+        matchTime: matchTime,
+        risk: '',
+        win: ''
+
       };
       var allBets = [].concat(_toConsumableArray(currentWagers), [currentBet]);
       var allUniqueBets = [].concat(_toConsumableArray(new Set(allBets.map(function (a) {
         return a;
       }))));
       _this.setState({
-        wagers: allUniqueBets
+        gameSelected: allUniqueBets
       });
     };
 
     _this.wagersHomeMoneyLine = function (item) {
-      var currentWagers = _this.state.wagers;
+      var currentWagers = _this.state.gameSelected;
       var line = item.Odds[0].MoneyLineHome;
       var juice = item.Odds[0].MoneyLineHome;
       var teamChosen = item.HomeTeam;
@@ -1156,19 +1173,21 @@ var Layout = function (_Component) {
         wagerType: "moneyline",
         juice: juice,
         line: line,
-        matchTime: matchTime
+        matchTime: matchTime,
+        risk: '',
+        win: ''
       };
       var allBets = [].concat(_toConsumableArray(currentWagers), [currentBet]);
       var allUniqueBets = [].concat(_toConsumableArray(new Set(allBets.map(function (a) {
         return a;
       }))));
       _this.setState({
-        wagers: allUniqueBets
+        gameSelected: allUniqueBets
       });
     };
 
     _this.wagersHomeTotalUnder = function (item) {
-      var currentWagers = _this.state.wagers;
+      var currentWagers = _this.state.gameSelected;
       var line = item.Odds[0].TotalNumber;
       var juice = item.Odds[0].UnderLine;
       var teamChosen = item.HomeTeam;
@@ -1180,7 +1199,9 @@ var Layout = function (_Component) {
         wagerType: "total",
         juice: juice,
         line: line,
-        matchTime: matchTime
+        matchTime: matchTime,
+        risk: '',
+        win: ''
 
       };
       var allBets = [].concat(_toConsumableArray(currentWagers), [currentBet]);
@@ -1188,12 +1209,12 @@ var Layout = function (_Component) {
         return a;
       }))));
       _this.setState({
-        wagers: allUniqueBets
+        gameSelected: allUniqueBets
       });
     };
 
     _this.wagersAwaySpread = function (item) {
-      var currentWagers = _this.state.wagers;
+      var currentWagers = _this.state.gameSelected;
       var line = item.Odds[0].PointSpreadAway;
       var juice = item.Odds[0].PointSpreadAwayLine;
       var teamChosen = item.AwayTeam;
@@ -1205,43 +1226,49 @@ var Layout = function (_Component) {
         wagerType: "spread",
         juice: juice,
         line: line,
-        matchTime: matchTime
+        matchTime: matchTime,
+        risk: '',
+        win: ''
       };
       var allBets = [].concat(_toConsumableArray(currentWagers), [currentBet]);
       var allUniqueBets = [].concat(_toConsumableArray(new Set(allBets.map(function (a) {
         return a;
       }))));
       _this.setState({
-        wagers: allUniqueBets
+        gameSelected: allUniqueBets
       });
     };
 
     _this.wagersAwayMoneyLine = function (item) {
-      var currentWagers = _this.state.wagers;
+      var _currentBet;
+
+      var currentWagers = _this.state.gameSelected;
       var line = item.Odds[0].MoneyLineAway;
       var juice = item.Odds[0].MoneyLineAway;
       var teamChosen = item.AwayTeam;
       var matchTime = item.MatchTime;
-      var currentBet = {
+      var currentBet = (_currentBet = {
         ID: item.ID,
         Details: item.Details,
         teamChosen: teamChosen,
         wagerType: "moneyline",
         juice: juice,
         line: line,
-        matchTime: matchTime
-      };
+        matchTime: matchTime,
+        risk: '',
+        win: ''
+      }, _defineProperty(_currentBet, 'risk', ''), _defineProperty(_currentBet, 'win', ''), _currentBet);
       var allBets = [].concat(_toConsumableArray(currentWagers), [currentBet]);
       var allUniqueBets = [].concat(_toConsumableArray(new Set(allBets.map(function (a) {
         return a;
       }))));
       _this.setState({
-        wagers: allUniqueBets
+        gameSelected: allUniqueBets
       });
     };
 
     _this.wagersAwayTotalOver = function (item) {
-      var currentWagers = _this.state.wagers;
+      var currentWagers = _this.state.gameSelected;
       var line = item.Odds[0].TotalNumber;
       var juice = item.Odds[0].OverLine;
       var teamChosen = item.AwayTeam;
@@ -1254,24 +1281,35 @@ var Layout = function (_Component) {
         wagerType: "total",
         juice: juice,
         line: line,
-        matchTime: matchTime
+        matchTime: matchTime,
+        risk: '',
+        win: ''
       };
       var allBets = [].concat(_toConsumableArray(currentWagers), [currentBet]);
       var allUniqueBets = [].concat(_toConsumableArray(new Set(allBets.map(function (a) {
         return a;
       }))));
       _this.setState({
-        wagers: allUniqueBets
+        gameSelected: allUniqueBets
       });
     };
 
     _this.state = {
       nfldata: _nfldata2.default,
-      gameSelected: [],
-      wagers: []
+      gameSelected: []
     };
     return _this;
   }
+
+  //
+  // confirmedWagers = (item)=>{
+  //   let currentState = [...this.state.gameSelected, item]
+  //   let allUniqueBets = [...new Set(currentState.map(a => a))];
+  //   this.setState({
+  //     gameSelected:allUniqueBets
+  //   })
+  // }
+
 
   //NFL Home Teams
 
@@ -1297,7 +1335,11 @@ var Layout = function (_Component) {
           wagersAwayMoneyLine: this.wagersAwayMoneyLine,
           wagersAwayTotalOver: this.wagersAwayTotalOver
         }, 'convertTime', this.convertTime)),
-        _react2.default.createElement(_Gameselected2.default, { gameSelected: this.state.gameSelected, handleChange: this.handleChange, wagers: this.state.wagers })
+        _react2.default.createElement(_Gameselected2.default, { gameSelected: this.state.gameSelected,
+          handleChange: this.handleChange,
+          wagers: this.state.wagers,
+          handleBetRisk: this.handleBetRisk
+        })
       );
     }
   }]);
@@ -1334,6 +1376,10 @@ var _reactDom = __webpack_require__(15);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
+var _lodash = __webpack_require__(130);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1351,14 +1397,9 @@ var Gameselected = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Gameselected.__proto__ || Object.getPrototypeOf(Gameselected)).call(this));
 
     _this.handleChange = function (item) {
-      console.log(event.target);
+      console.log(item);
 
       _this.props.handleChange(item);
-      // if(this.props.gameSelected.filter(food => food.ID === item.ID)){
-      //   console.log('its already in here fool', item.ID)
-      // }else{
-      //   console.log('new game added')
-      // }
     };
 
     _this.convertTime = function (convert) {
@@ -1366,14 +1407,43 @@ var Gameselected = function (_Component) {
       return date.toLocaleString(); // "Wed Jun 29 2011 09:52:48 GMT-0700 (PDT)"
     };
 
+    _this.handleBetRisk = function (e, item) {
+
+      var bet = e.target.value;
+
+      if (item.juice < 0) {
+        var calcBet = function calcBet(bet) {
+          var newAmount = 100 / item.juice * bet;
+          return newAmount;
+        };
+        var win = calcBet(bet);
+        win = Math.round(win * 100) / 100;
+        win = Math.abs(win);
+        _this.props.handleBetRisk(item, win, bet);
+      } else {
+        var _calcBet = function _calcBet(bet) {
+          var newAmount = item.juice * .01 * bet;
+          return newAmount;
+        };
+        var _win = _calcBet(bet);
+        _win = Math.round(_win * 100) / 100;
+        _this.props.handleBetRisk(item, _win, bet);
+      }
+    };
+
     _this.showme = function () {
-      var games = _this.props.wagers;
+      var games = _this.props.gameSelected;
       return games.map(function (item, i) {
         return _react2.default.createElement(
           'div',
-          { className: 'game-selected-container', key: i, onClick: function onClick() {
-              return _this.handleChange(item);
-            } },
+          { className: 'game-selected-container', key: i },
+          _react2.default.createElement(
+            'div',
+            { className: 'close-btn', onClick: function onClick() {
+                return _this.handleChange(item);
+              } },
+            _react2.default.createElement('img', { src: './img/sportIcons/close-btn.svg' })
+          ),
           _react2.default.createElement(
             'div',
             { className: 'bet-container' },
@@ -1417,11 +1487,52 @@ var Gameselected = function (_Component) {
           _react2.default.createElement(
             'div',
             { className: 'wager-amount' },
-            _react2.default.createElement('input', { type: 'text', name: 'fname' }),
-            _react2.default.createElement('input', { type: 'text', name: 'fname' })
+            _react2.default.createElement(
+              'div',
+              { className: 'group-risk' },
+              _react2.default.createElement('input', { type: 'number', name: 'risk', value: item.risk, onChange: function onChange(e) {
+                  return _this.handleBetRisk(e, item);
+                } }),
+              _react2.default.createElement(
+                'span',
+                null,
+                'Risk'
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'group-winbox' },
+              _react2.default.createElement(
+                'h5',
+                null,
+                item.win
+              ),
+              _react2.default.createElement(
+                'span',
+                null,
+                'Win'
+              )
+            )
           )
         );
       });
+    };
+
+    _this.totalMoneyRisked = function () {
+      var s = _lodash2.default.reduce(_this.props.gameSelected, function (s, entry) {
+        return s + parseFloat(entry.risk);
+      }, 0);
+      s = Math.abs(Math.round(s * 100) / 100);
+      return s;
+    };
+
+    _this.totalMoneyWinPossible = function () {
+      var s = _lodash2.default.reduce(_this.props.gameSelected, function (s, entry) {
+        return s + parseFloat(entry.win);
+      }, 0);
+      s = Math.abs(Math.round(s * 100) / 100);
+
+      return s;
     };
 
     _this.state = {};
@@ -1435,16 +1546,64 @@ var Gameselected = function (_Component) {
         'div',
         { id: 'game-selected' },
         _react2.default.createElement(
-          'button',
-          null,
-          'Continue to Wager Section'
-        ),
-        _react2.default.createElement(
           'h1',
           null,
           'Bet Slip'
         ),
-        this.showme()
+        this.showme(),
+        _react2.default.createElement(
+          'div',
+          { className: 'wager-confirmation-container' },
+          _react2.default.createElement(
+            'div',
+            { className: 'confirmation-group bets' },
+            _react2.default.createElement(
+              'h5',
+              null,
+              'Total Bets:'
+            ),
+            _react2.default.createElement(
+              'h5',
+              null,
+              this.props.gameSelected.length
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'confirmation-group bet-risk' },
+            _react2.default.createElement(
+              'h5',
+              null,
+              'Total Stake:'
+            ),
+            _react2.default.createElement(
+              'h5',
+              null,
+              ' ',
+              isNaN(this.totalMoneyRisked()) ? ' Fill-in bet' : '$' + this.totalMoneyRisked()
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'confirmation-group bet-win' },
+            _react2.default.createElement(
+              'h5',
+              null,
+              'Possible Winnings'
+            ),
+            _react2.default.createElement(
+              'h5',
+              null,
+              ' ',
+              isNaN(this.totalMoneyWinPossible()) ? '' : '$' + this.totalMoneyWinPossible()
+            )
+          ),
+          _react2.default.createElement(
+            'button',
+            { type: 'text' },
+            'Place Wager'
+          )
+        )
       );
     }
   }]);

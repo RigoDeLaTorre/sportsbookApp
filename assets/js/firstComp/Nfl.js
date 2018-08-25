@@ -14,7 +14,7 @@ export default class Nfl extends Component {
 gameLoop=()=>{
   return this.props.games.map((item)=>{
     return(
-<div className="games-container" key ={item.ID} onClick={()=>this.props.gameSelected(item)}>
+<div className="games-container" key ={item.ID}>
       <div className="games match-time">
         <h5>{this.props.convertTime(item.MatchTime)}</h5>
       </div>
