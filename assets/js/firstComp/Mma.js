@@ -1,7 +1,7 @@
 import React, { Component} from 'react'
 import ReactDOM from 'react-dom';
 
- const Nfl = (props) => {
+ const Mma = (props) => {
 
     return (
 
@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
         <div className="games-section">
           <div className ="title-headers">
               <div className ="game-header">
-                <h5>Team</h5>
+                <h5>Fighter</h5>
               </div>
               <div className="spread-header">
                 <h5>Spread</h5>
@@ -18,13 +18,13 @@ import ReactDOM from 'react-dom';
                 <h5>MoneyLine</h5>
               </div>
               <div className ="overunder-header">
-                <h5>Total</h5>
+                <h5>Rounds</h5>
               </div>
             </div>
-            {props.gameLoopNfl()}
+            {props.gameLoopMma()}
           </div>
       </div>
 
     )
 }
-export default Nfl;
+export default Mma;

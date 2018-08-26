@@ -11,16 +11,16 @@ import ReactDOM from 'react-dom';
                 <h5>Team</h5>
               </div>
               <div className="spread-header">
-                <h5>Spread</h5>
+                <h5>Runline</h5>
               </div>
               <div className ="moneyline-header">
                 <h5>MoneyLine</h5>
               </div>
               <div className ="overunder-header">
-                <h5>Total</h5>
+                <h5>Total Runs</h5>
               </div>
             </div>
-            {props.gameLoopNfl()}
+            {props.gameLoopMlb()}
           </div>
       </div>
     )

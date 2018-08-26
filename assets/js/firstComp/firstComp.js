@@ -1,18 +1,26 @@
 import React, { Component} from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter, Route, Switch, Link } from 'react-router-dom'
 import nfldata from './data/nfldata.js'
 import mlbdata from './data/mlbdata.js'
+import mmadata from './data/mmadata.js'
 import Nav from './Nav'
 import Nfl from './Nfl'
 import Mlb from './Mlb'
+import Mma from './Mma'
 import Gameselected from './Gameselected'
-import Header from './Header'
+import HeaderNfl from './HeaderNfl'
+import HeaderMlb from './HeaderMlb'
+import HeaderMma from './HeaderMma'
+
 
  class Layout extends Component {
   constructor () {
     super()
     this.state = {
       nfldata:nfldata,
+      mlbdata:mlbdata,
+      mmadata:mmadata,
       gameSelected:[],
     }
   }
@@ -33,6 +41,62 @@ import Header from './Header'
 //Loops through the nfl data and displays all games for spread, moneyline, and total.
 gameLoopNfl = ()=>{
     return this.state.nfldata.map((item)=>{
+      return(
+          <div className="games-container" key ={item.ID}>
+                <div className="games match-time">
+                    <h5>{this.convertTime(item.MatchTime)}</h5>
+                </div>
+                <div className ="gamelist" >
+                    <div className ="games teams">
+                        <h5 className="hometeam">{item.AwayTeam}</h5>
+                    </div>
+                    <h5 className="spread" onClick={(e)=>this.wagersAwaySpread(item)}>{item.Odds[0].PointSpreadAway} ({item.Odds[0].PointSpreadAwayLine})</h5>
+                    <h5 className="moneyline" onClick={(e)=>this.wagersAwayMoneyLine(item)}>{item.Odds[0].MoneyLineAway}</h5>
+                    <h5 className="total" onClick={(e)=>this.wagersAwayTotalOver(item)}>0 {item.Odds[0].TotalNumber} ( {item.Odds[0].OverLine} )</h5>
+                </div>
+                <div className ="gamelist" >
+                    <div className ="games teams">
+                        <h5 className="hometeam">{item.HomeTeam}</h5>
+                    </div>
+                    <h5 className="spread" onClick={(e)=>this.wagersHomeSpread(item)}>{item.Odds[0].PointSpreadHome} ({item.Odds[0].PointSpreadHomeLine})</h5>
+                    <h5 className="moneyline" onClick={(e)=>this.wagersHomeMoneyLine(item)}>{item.Odds[0].MoneyLineHome}</h5>
+                    <h5 className="total" onClick={(e)=>this.wagersHomeTotalUnder(item)}>U {item.Odds[0].TotalNumber} ( {item.Odds[0].UnderLine} )</h5>
+                </div>
+
+          </div>
+      )
+    })
+}
+gameLoopMlb = ()=>{
+    return this.state.mlbdata.map((item)=>{
+      return(
+          <div className="games-container" key ={item.ID}>
+                <div className="games match-time">
+                    <h5>{this.convertTime(item.MatchTime)}</h5>
+                </div>
+                <div className ="gamelist" >
+                    <div className ="games teams">
+                        <h5 className="hometeam">{item.AwayTeam}</h5>
+                    </div>
+                    <h5 className="spread" onClick={(e)=>this.wagersAwaySpread(item)}>{item.Odds[0].PointSpreadAway} ({item.Odds[0].PointSpreadAwayLine})</h5>
+                    <h5 className="moneyline" onClick={(e)=>this.wagersAwayMoneyLine(item)}>{item.Odds[0].MoneyLineAway}</h5>
+                    <h5 className="total" onClick={(e)=>this.wagersAwayTotalOver(item)}>0 {item.Odds[0].TotalNumber} ( {item.Odds[0].OverLine} )</h5>
+                </div>
+                <div className ="gamelist" >
+                    <div className ="games teams">
+                        <h5 className="hometeam">{item.HomeTeam}</h5>
+                    </div>
+                    <h5 className="spread" onClick={(e)=>this.wagersHomeSpread(item)}>{item.Odds[0].PointSpreadHome} ({item.Odds[0].PointSpreadHomeLine})</h5>
+                    <h5 className="moneyline" onClick={(e)=>this.wagersHomeMoneyLine(item)}>{item.Odds[0].MoneyLineHome}</h5>
+                    <h5 className="total" onClick={(e)=>this.wagersHomeTotalUnder(item)}>U {item.Odds[0].TotalNumber} ( {item.Odds[0].UnderLine} )</h5>
+                </div>
+
+          </div>
+      )
+    })
+}
+gameLoopMma = ()=>{
+    return this.state.mmadata.map((item)=>{
       return(
           <div className="games-container" key ={item.ID}>
                 <div className="games match-time">
@@ -222,17 +286,34 @@ gameLoopNfl = ()=>{
 
   render () {
     return (
-      <div className='app-container'>
-        <Header />
+      <BrowserRouter>
+       <div className='app-container'>
+       <Switch>
+         <Route exact path ="/" component={HeaderNfl} />
+          <Route path ="/mlb" component={HeaderMlb} />
+          <Route path ="/nfl" component={HeaderNfl} />
+          <Route path ="/mma" component={HeaderMma} />
+       </Switch>
         <Nav />
-        <Mlb gameLoopNfl={this.gameLoopNfl}/>
+          <Route
+          exact path = '/'
+          render ={(props) =><Mlb {...props} gameLoopMlb={this.gameLoopMlb}/>} />
+          <Route
+          path ='/mlb'
+          render ={(props) =><Mlb {...props} gameLoopMlb={this.gameLoopMlb}/>} />
+          <Route
+          path ='/nfl'
+          render ={(props) =><Nfl {...props} gameLoopNfl={this.gameLoopNfl}/>} />
+          <Route
+          path ='/mma'
+          render ={(props) =><Mma {...props} gameLoopMma={this.gameLoopMma}/>} />
         <Gameselected gameSelected={this.state.gameSelected}
-         cancelBet={this.cancelBet}
-         wagers={this.state.wagers}
-         handleBetRisk={this.handleBetRisk}
-         convertTime={this.convertTime}/>
-    </div>
-
+           cancelBet={this.cancelBet}
+           wagers={this.state.wagers}
+           handleBetRisk={this.handleBetRisk}
+           convertTime={this.convertTime}/>
+      </div>
+      </BrowserRouter>
 
     )
   }

@@ -1,5 +1,6 @@
 import React, { Component} from 'react'
 import ReactDOM from 'react-dom';
+import { NavLink, Link } from 'react-router-dom'
 
 
 
@@ -23,15 +24,15 @@ export default class Nav extends Component {
           <div className="icon"> <i className="fas fa-chevron-down"></i> </div>
         </div>
         <nav>
-      
-          <div className="nav-links"><a href="/jquery/">Baseball</a></div>
-          <div className="nav-links"><a href="/jquery/">Basketball</a></div>
-          <div className="nav-links"><a href="/jquery/">Boxing</a></div>
-          <div className="nav-links"><a href="/jquery/">Football</a></div>
-          <div className="nav-links"><a href="/jquery/">Ice Hockey</a></div>
-          <div className="nav-links"><a href="/jquery/">Soccer</a></div>
-          <div className="nav-links"><a href="/jquery/">Tennis</a></div>
-          <div className="nav-links"><a href="/jquery/">UFC/MMA</a></div>
+
+          <div className="nav-links"><NavLink to="/mlb" activeClassName="selected">Baseball </NavLink></div>
+          <div className="nav-links"><NavLink to="/nba" activeClassName="selected">BasketBall </NavLink></div>
+          <div className="nav-links"><NavLink to="/boxing" activeClassName="selected">Boxing </NavLink></div>
+        <div className="nav-links"><NavLink to="/nfl" activeClassName="selected">Nfl </NavLink></div>
+          <div className="nav-links"><NavLink to="/hockey" activeClassName="selected">Hockey </NavLink></div>
+          <div className="nav-links"><NavLink to="/soccer" activeClassName="selected">Soccer </NavLink></div>
+          <div className="nav-links"><NavLink to="/tennis" activeClassName="selected">Tennis </NavLink></div>
+          <div className="nav-links"><NavLink to="/mma" activeClassName="selected">UFC/MMA </NavLink></div>
       </nav>
       </div>)
   }

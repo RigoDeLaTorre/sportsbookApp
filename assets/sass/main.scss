@@ -1,10 +1,13 @@
 @import "reset";
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700');
 
-*{
-  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-     box-sizing: border-box;         /* Opera/IE 8+ */
+* {
+  -webkit-box-sizing: border-box;
+  /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;
+  /* Firefox, other Gecko */
+  box-sizing: border-box;
+  /* Opera/IE 8+ */
 }
 
 body {
@@ -23,6 +26,7 @@ body {
   background: linear-gradient(135deg, rgba(15,32,39,1) 0%, rgba(44,83,100,1) 100%);
 }
 
+
 .app-container {
   width: 100%;
   width: 100vw;
@@ -40,8 +44,6 @@ body {
     height: 170px;
     padding: 2rem 0;
     width: 1400px;
-    background: linear-gradient(rgba(27,52,63,0.41), #050708) 0 0/cover,url(/img/background-main.jpg) center center no-repeat fixed;
-    background-size: cover;
 
     .header-logo {
       text-align: center;
@@ -96,9 +98,9 @@ body {
       display: grid;
       grid-template-columns: 1fr 4fr 1fr;
       padding: 15px 5px;
-      -webkit-box-shadow: 0px 0px 15px -3px rgba(204,196,196,1);
--moz-box-shadow: 0px 0px 15px -3px rgba(204,196,196,1);
-box-shadow: 0px 0px 15px -3px rgba(204,196,196,1);
+      -webkit-box-shadow: 0 0 15px -3px rgba(204,196,196,1);
+      -moz-box-shadow: 0 0 15px -3px rgba(204,196,196,1);
+      box-shadow: 0 0 15px -3px rgba(204,196,196,1);
 
       .logo {
         display: flex;
@@ -138,9 +140,12 @@ box-shadow: 0px 0px 15px -3px rgba(204,196,196,1);
         width: 100%;
         text-align: center;
         border: 1px solid #f3f3f3;
-        -webkit-box-shadow: 0px 0px 15px -3px rgba(224,220,220,1);
--moz-box-shadow: 0px 0px 15px -3px rgba(224,220,220,1);
-box-shadow: 0px 0px 15px -3px rgba(224,220,220,1);
+        -webkit-box-shadow: 0 0 15px -3px rgba(224,220,220,1);
+        -moz-box-shadow: 0 0 15px -3px rgba(224,220,220,1);
+        box-shadow: 0 0 15px -3px rgba(224,220,220,1);
+        .selected{
+          background:#bad8e4;
+        }
 
         &:hover {
           background: #f3f3f3;
@@ -165,7 +170,7 @@ box-shadow: 0px 0px 15px -3px rgba(224,220,220,1);
     grid-area: middle;
     background: #ededed;
     border-left: 1px solid #e2d6d6;
-    overflow:hidden;
+    overflow: hidden;
 
     .games-section {
       .title-headers {
@@ -196,28 +201,31 @@ box-shadow: 0px 0px 15px -3px rgba(224,220,220,1);
       }
 
       .games-container {
-        position:relative;
+        position: relative;
         background: white;
         display: flex;
         flex-direction: column;
         margin-bottom: 1rem;
         cursor: pointer;
-        -webkit-box-shadow: 0px 0px 15px -3px rgba(82,82,82,1);
-        -moz-box-shadow: 0px 0px 15px -3px rgba(82,82,82,1);
-        box-shadow: 0px 0px 15px -3px rgba(82,82,82,1);
+        -webkit-box-shadow: 0 0 15px -3px rgba(82,82,82,1);
+        -moz-box-shadow: 0 0 15px -3px rgba(82,82,82,1);
+        box-shadow: 0 0 15px -3px rgba(82,82,82,1);
+
         &:hover {
           background: #b8d8e6;
         }
-        .match-time{
-          position:absolute;
+
+        .match-time {
+          position: absolute;
           top: 20%;
-          left:10px;
+          left: 10px;
           background: #dde7ea;
           border-radius: 3px;
-          h5{
-            font-size:.7em;
-            width:70px;
-            padding:5px;
+
+          h5 {
+            font-size: 0.7em;
+            width: 70px;
+            padding: 5px;
           }
         }
 
@@ -234,10 +242,8 @@ box-shadow: 0px 0px 15px -3px rgba(224,220,220,1);
             h5 {
               font-size: 0.8em;
               padding: 7px;
-
             }
           }
-
 
           .teams {
             flex: 3;
@@ -247,7 +253,9 @@ box-shadow: 0px 0px 15px -3px rgba(224,220,220,1);
             }
           }
 
-          .spread,.moneyline,.total {
+          .moneyline,
+          .spread,
+          .total {
             border: 1px solid #e6dcdc;
             flex: 1;
             text-align: center;
@@ -269,159 +277,159 @@ box-shadow: 0px 0px 15px -3px rgba(224,220,220,1);
       font-size: 1.5rem;
       text-align: center;
       font-weight: 300;
-      padding:5px 0;
+      padding: 5px 0;
     }
 
+    .game-selected-container {
+      background: white;
+      padding: 15px;
+      margin-bottom: 2rem;
+      position: relative;
 
+      .close-btn {
+        position: absolute;
+        top: 49px;
+        right: 11px;
+        cursor: pointer;
 
-.game-selected-container{
-  background:white;
-  padding:15px;
-  margin-bottom:2rem;
-  position:relative;
-  .close-btn{
-    position:absolute;
-    top: 49px;
-  right: 11px;
-  cursor:pointer;
-  img{
-    width:30px;
-    height:30px;
-
-  }
-  }
-  .bet-container{
-      margin-bottom:.5rem;
-    display:flex;
-    flex-direction:row;
-    justify-content: space-between;
-
-    .bet-chosen{
-      display:flex;
-      flex-direction:column;
-
-      .teamChozen{
-        font-weight:700;
-        margin-right:5px;
-        text-transform: capitalize;
+        img {
+          width: 30px;
+          height: 30px;
+        }
       }
 
-    }
-    .wager-type{
-      font-weight:300;
-      font-size:.8em;
-      text-transform: capitalize;
-    }
-  }
-  .match-container{
-    display:flex;
-    flex-direction:column;
-    .game{
-      color: #406371;
-    font-size: .8em;
-    }
-    .match-time{
-      font-size:.7em;
-      font-weight:300;
-      color:gray;
+      .bet-container {
+        margin-bottom: 0.5rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
 
-    }
-  }
-  .wager-amount{
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    margin:1rem 0;
-    .group-risk{
-      position:relative;
+        .bet-chosen {
+          display: flex;
+          flex-direction: column;
 
+          .teamChozen {
+            font-weight: 700;
+            margin-right: 5px;
+            text-transform: capitalize;
+          }
+        }
 
-      input[type="number"]{
-      color: #162b3d;
-      height: 30px;
-        width: 150px;
-      border-radius: 5px;
-      text-align: left;
-      padding-left:50px;
-      font-weight:600;
-
+        .wager-type {
+          font-weight: 300;
+          font-size: 0.8em;
+          text-transform: capitalize;
+        }
       }
-      span{
-      position: absolute;
-      top: 8px;
-      left: 11px;
-      color: #8c9194;
-      font-size: .6em;
+
+      .match-container {
+        display: flex;
+        flex-direction: column;
+
+        .game {
+          color: #406371;
+          font-size: 0.8em;
+        }
+
+        .match-time {
+          font-size: 0.7em;
+          font-weight: 300;
+          color: gray;
+        }
       }
-    }
-    .group-winbox{
-            text-align: right;
-              position:relative;
-                padding:1px 0;
-                border: 1px solid #9e9595;
+
+      .wager-amount {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        margin: 1rem 0;
+
+        .group-risk {
+          position: relative;
+
+          input[type="number"] {
+            color: #162b3d;
+            height: 30px;
+            width: 150px;
+            border-radius: 5px;
+            text-align: left;
+            padding-left: 50px;
+            font-weight: 600;
+          }
+
+          span {
+            position: absolute;
+            top: 8px;
+            left: 11px;
+            color: #8c9194;
+            font-size: 0.6em;
+          }
+        }
+
+        .group-winbox {
+          text-align: right;
+          position: relative;
+          padding: 1px 0;
+          border: 1px solid #9e9595;
           background: #f2f2f2;
           height: 30px;
           width: 150px;
+          border-radius: 5px;
 
-                    border-radius: 5px;
-      h5{
-        color: #162b3d;
-        font-size:.9em;
-        position:relative;
-        top: 7px;
-        right: 33px;
-              font-weight:600;
+          h5 {
+            color: #162b3d;
+            font-size: 0.9em;
+            position: relative;
+            top: 7px;
+            right: 33px;
+            font-weight: 600;
+          }
 
-
-
-      }
-      span{
-        position: absolute;
-        top: 8px;
-        left: 11px;
-        color: #8c9194;
-        font-size: .6em;
-
+          span {
+            position: absolute;
+            top: 8px;
+            left: 11px;
+            color: #8c9194;
+            font-size: 0.6em;
+          }
+        }
       }
     }
 
+    .wager-confirmation-container {
+      background: #162b3d;
+      color: #d6d6d6;
+      padding: 15px;
 
-  }
+      .confirmation-group {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
 
-}
+      button {
+        background: #406371;
+        font-size: 1rem;
+        text-align: center;
+        max-width: 100%;
+        width: 100%;
+        padding: 15px 0;
+        color: white;
+        font-weight: 100;
+        letter-spacing: 2px;
+        border: none;
+        margin-bottom: 1rem;
+        border-radius: 3px;
+        margin-top: 1rem;
+        -webkit-box-shadow: 0 16px 52px -21px rgba(84,136,143,1);
+        -moz-box-shadow: 0 16px 52px -21px rgba(84,136,143,1);
+        box-shadow: 0 16px 52px -21px rgba(84,136,143,1);
 
-.wager-confirmation-container{
-  background: #162b3d;
-color: #d6d6d6;
-padding:15px;
-  .confirmation-group{
-    display:flex;
-    justify-content: space-between;
-    margin-bottom:.5rem;
-  }
-  button{
-    background: #406371;
-    font-size: 1rem;
-    text-align: center;
-    max-width: 100%;
-    width: 100%;
-    padding: 15px 0;
-    color: white;
-    font-weight: 100;
-    letter-spacing: 2px;
-    border: none;
-    margin-bottom: 1rem;
-    border-radius: 3px;
-    margin-top: 1rem;
-    -webkit-box-shadow: 0px 16px 52px -21px rgba(84,136,143,1);
--moz-box-shadow: 0px 16px 52px -21px rgba(84,136,143,1);
-box-shadow: 0px 16px 52px -21px rgba(84,136,143,1);
-    &:hover{
-      background:#45798e;
+        &:hover {
+          background: #45798e;
+        }
+      }
     }
-  }
-}
-
   }
 }

@@ -1,6 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 100:
+/***/ 115:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12,13 +12,663 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(13);
+var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(14);
+var _reactDom = __webpack_require__(11);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _lodash = __webpack_require__(155);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Gameselected = function (_Component) {
+  _inherits(Gameselected, _Component);
+
+  function Gameselected() {
+    _classCallCheck(this, Gameselected);
+
+    var _this = _possibleConstructorReturn(this, (Gameselected.__proto__ || Object.getPrototypeOf(Gameselected)).call(this));
+
+    _this.cancelBet = function (item) {
+      _this.props.cancelBet(item);
+    };
+
+    _this.handleBetRisk = function (e, item) {
+      var bet = e.target.value;
+      if (item.juice < 0) {
+        var calcBet = function calcBet(bet) {
+          var newAmount = 100 / item.juice * bet;
+          return newAmount;
+        };
+        var win = calcBet(bet);
+        win = Math.round(win * 100) / 100;
+        win = Math.abs(win);
+        _this.props.handleBetRisk(item, win, bet);
+      } else {
+        var _calcBet = function _calcBet(bet) {
+          var newAmount = item.juice * .01 * bet;
+          return newAmount;
+        };
+        var _win = _calcBet(bet);
+        _win = Math.round(_win * 100) / 100;
+        _this.props.handleBetRisk(item, _win, bet);
+      }
+    };
+
+    _this.displaySelectedBets = function () {
+      var games = _this.props.gameSelected;
+      return games.map(function (item, i) {
+        return _react2.default.createElement(
+          'div',
+          { className: 'game-selected-container', key: i },
+          _react2.default.createElement(
+            'div',
+            { className: 'close-btn', onClick: function onClick() {
+                return _this.cancelBet(item);
+              } },
+            _react2.default.createElement('img', { src: './img/sportIcons/close-btn.svg' })
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'bet-container' },
+            _react2.default.createElement(
+              'div',
+              { className: 'bet-chosen' },
+              _react2.default.createElement(
+                'span',
+                { className: 'teamChozen' },
+                item.teamChosen,
+                '  ',
+                item.line > 0 && item.wagerType === 'moneyline' || item.line > 0 && item.wagerType === 'spread' ? '+ ' + item.line : item.line,
+                ' '
+              ),
+              _react2.default.createElement(
+                'span',
+                { className: 'wager-type' },
+                item.wagerType
+              )
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'wager-type' },
+              item.wagerType === 'moneyline' ? '' : item.juice
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'match-container' },
+            _react2.default.createElement(
+              'span',
+              { className: 'game' },
+              item.Details
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'match-time' },
+              _this.props.convertTime(item.matchTime)
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'wager-amount' },
+            _react2.default.createElement(
+              'div',
+              { className: 'group-risk' },
+              _react2.default.createElement('input', { type: 'number', name: 'risk', value: item.risk, onChange: function onChange(e) {
+                  return _this.handleBetRisk(e, item);
+                } }),
+              _react2.default.createElement(
+                'span',
+                null,
+                'Risk'
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'group-winbox' },
+              _react2.default.createElement(
+                'h5',
+                null,
+                item.win
+              ),
+              _react2.default.createElement(
+                'span',
+                null,
+                'Win'
+              )
+            )
+          )
+        );
+      });
+    };
+
+    _this.totalMoneyRisked = function () {
+      var s = _lodash2.default.reduce(_this.props.gameSelected, function (s, entry) {
+        return s + parseFloat(entry.risk);
+      }, 0);
+      s = Math.abs(Math.round(s * 100) / 100);
+      return s;
+    };
+
+    _this.totalMoneyWinPossible = function () {
+      var s = _lodash2.default.reduce(_this.props.gameSelected, function (s, entry) {
+        return s + parseFloat(entry.win);
+      }, 0);
+      s = Math.abs(Math.round(s * 100) / 100);
+
+      return s;
+    };
+
+    _this.state = {};
+    return _this;
+  }
+
+  //passes the item to parent container method to filter/cancel a bet when user clicks the cancel icon
+
+  // Takes in the bet amount and passes the newly calculated risk & win amount to the parent method, to update the state of gameselected with it.
+
+
+  // displays/renders all bets the user has selected to bet on
+
+  //Updates the toal amount the user is wanting to wager on the current betslip
+
+  //Updates the toal amount the user can win based on total bets on the current betslip
+
+
+  _createClass(Gameselected, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { id: 'game-selected' },
+        _react2.default.createElement(
+          'h1',
+          null,
+          'Bet Slip'
+        ),
+        this.displaySelectedBets(),
+        _react2.default.createElement(
+          'div',
+          { className: 'wager-confirmation-container' },
+          _react2.default.createElement(
+            'div',
+            { className: 'confirmation-group bets' },
+            _react2.default.createElement(
+              'h5',
+              null,
+              'Total Bets:'
+            ),
+            _react2.default.createElement(
+              'h5',
+              null,
+              this.props.gameSelected.length
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'confirmation-group bet-risk' },
+            _react2.default.createElement(
+              'h5',
+              null,
+              'Total Stake:'
+            ),
+            _react2.default.createElement(
+              'h5',
+              null,
+              ' ',
+              isNaN(this.totalMoneyRisked()) ? ' Fill-in bet' : '$' + this.totalMoneyRisked()
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'confirmation-group bet-win' },
+            _react2.default.createElement(
+              'h5',
+              null,
+              'Possible Winnings'
+            ),
+            _react2.default.createElement(
+              'h5',
+              null,
+              ' ',
+              isNaN(this.totalMoneyWinPossible()) ? '' : '$' + this.totalMoneyWinPossible()
+            )
+          ),
+          _react2.default.createElement(
+            'button',
+            { type: 'text' },
+            'Place Wager'
+          )
+        )
+      );
+    }
+  }]);
+
+  return Gameselected;
+}(_react.Component);
+
+exports.default = Gameselected;
+
+/***/ }),
+
+/***/ 116:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(11);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var HeaderMlb = function (_Component) {
+  _inherits(HeaderMlb, _Component);
+
+  function HeaderMlb() {
+    _classCallCheck(this, HeaderMlb);
+
+    var _this = _possibleConstructorReturn(this, (HeaderMlb.__proto__ || Object.getPrototypeOf(HeaderMlb)).call(this));
+
+    _this.state = {};
+    return _this;
+  }
+
+  _createClass(HeaderMlb, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { id: 'header', style: {
+            background: "linear-gradient(rgba(27,52,63,0.41), #050708) 0 0/cover,url(/img/background-mlb.jpg) center bottom no-repeat",
+            backgroundSize: "cover"
+          } },
+        _react2.default.createElement(
+          'div',
+          { className: 'header-logo' },
+          _react2.default.createElement('img', { src: './img/sportIcons/mlbLogo.png' })
+        ),
+        _react2.default.createElement('div', { className: 'account-section' }),
+        _react2.default.createElement(
+          'div',
+          { className: 'sport-icons' },
+          _react2.default.createElement(
+            'div',
+            { className: 'sports-group' },
+            _react2.default.createElement('img', { src: '/img/sportIcons/soccer.svg' }),
+            _react2.default.createElement('img', { src: '/img/sportIcons/football.svg' }),
+            _react2.default.createElement('img', { src: '/img/sportIcons/mma.svg' }),
+            _react2.default.createElement('img', { src: '/img/sportIcons/baseball.svg' })
+          )
+        )
+      );
+    }
+  }]);
+
+  return HeaderMlb;
+}(_react.Component);
+
+exports.default = HeaderMlb;
+
+/***/ }),
+
+/***/ 117:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(11);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var HeaderMma = function (_Component) {
+  _inherits(HeaderMma, _Component);
+
+  function HeaderMma() {
+    _classCallCheck(this, HeaderMma);
+
+    var _this = _possibleConstructorReturn(this, (HeaderMma.__proto__ || Object.getPrototypeOf(HeaderMma)).call(this));
+
+    _this.state = {};
+    return _this;
+  }
+
+  _createClass(HeaderMma, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { id: 'header', style: {
+            background: "linear-gradient(rgba(27,52,63,0.41), #050708) 0 0/cover,url(/img/background-mma.jpg) center center no-repeat ",
+            backgroundSize: "cover"
+          } },
+        _react2.default.createElement(
+          'div',
+          { className: 'header-logo' },
+          _react2.default.createElement('img', { src: './img/sportIcons/ufcLogo.png' })
+        ),
+        _react2.default.createElement('div', { className: 'account-section' }),
+        _react2.default.createElement(
+          'div',
+          { className: 'sport-icons' },
+          _react2.default.createElement(
+            'div',
+            { className: 'sports-group' },
+            _react2.default.createElement('img', { src: '/img/sportIcons/soccer.svg' }),
+            _react2.default.createElement('img', { src: '/img/sportIcons/football.svg' }),
+            _react2.default.createElement('img', { src: '/img/sportIcons/mma.svg' }),
+            _react2.default.createElement('img', { src: '/img/sportIcons/baseball.svg' })
+          )
+        )
+      );
+    }
+  }]);
+
+  return HeaderMma;
+}(_react.Component);
+
+exports.default = HeaderMma;
+
+/***/ }),
+
+/***/ 118:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(11);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var HeaderNfl = function (_Component) {
+  _inherits(HeaderNfl, _Component);
+
+  function HeaderNfl() {
+    _classCallCheck(this, HeaderNfl);
+
+    var _this = _possibleConstructorReturn(this, (HeaderNfl.__proto__ || Object.getPrototypeOf(HeaderNfl)).call(this));
+
+    _this.state = {};
+    return _this;
+  }
+
+  _createClass(HeaderNfl, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { id: 'header', style: {
+            background: "linear-gradient(rgba(27,52,63,0.41), #050708) 0 0/cover,url(/img/background-main.jpg) center center no-repeat fixed",
+            backgroundSize: "cover"
+          } },
+        _react2.default.createElement(
+          'div',
+          { className: 'header-logo' },
+          _react2.default.createElement('img', { src: './img/sportIcons/nflLogo.svg' })
+        ),
+        _react2.default.createElement('div', { className: 'account-section' }),
+        _react2.default.createElement(
+          'div',
+          { className: 'sport-icons' },
+          _react2.default.createElement(
+            'div',
+            { className: 'sports-group' },
+            _react2.default.createElement('img', { src: '/img/sportIcons/soccer.svg' }),
+            _react2.default.createElement('img', { src: '/img/sportIcons/football.svg' }),
+            _react2.default.createElement('img', { src: '/img/sportIcons/mma.svg' }),
+            _react2.default.createElement('img', { src: '/img/sportIcons/baseball.svg' })
+          )
+        )
+      );
+    }
+  }]);
+
+  return HeaderNfl;
+}(_react.Component);
+
+exports.default = HeaderNfl;
+
+/***/ }),
+
+/***/ 119:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(11);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Mlb = function Mlb(props) {
+
+  return _react2.default.createElement(
+    'div',
+    { id: 'nfl-section' },
+    _react2.default.createElement(
+      'div',
+      { className: 'games-section' },
+      _react2.default.createElement(
+        'div',
+        { className: 'title-headers' },
+        _react2.default.createElement(
+          'div',
+          { className: 'game-header' },
+          _react2.default.createElement(
+            'h5',
+            null,
+            'Team'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'spread-header' },
+          _react2.default.createElement(
+            'h5',
+            null,
+            'Runline'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'moneyline-header' },
+          _react2.default.createElement(
+            'h5',
+            null,
+            'MoneyLine'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'overunder-header' },
+          _react2.default.createElement(
+            'h5',
+            null,
+            'Total Runs'
+          )
+        )
+      ),
+      props.gameLoopMlb()
+    )
+  );
+};
+exports.default = Mlb;
+
+/***/ }),
+
+/***/ 120:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(11);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Mma = function Mma(props) {
+
+  return _react2.default.createElement(
+    'div',
+    { id: 'nfl-section' },
+    _react2.default.createElement(
+      'div',
+      { className: 'games-section' },
+      _react2.default.createElement(
+        'div',
+        { className: 'title-headers' },
+        _react2.default.createElement(
+          'div',
+          { className: 'game-header' },
+          _react2.default.createElement(
+            'h5',
+            null,
+            'Fighter'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'spread-header' },
+          _react2.default.createElement(
+            'h5',
+            null,
+            'Spread'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'moneyline-header' },
+          _react2.default.createElement(
+            'h5',
+            null,
+            'MoneyLine'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'overunder-header' },
+          _react2.default.createElement(
+            'h5',
+            null,
+            'Rounds'
+          )
+        )
+      ),
+      props.gameLoopMma()
+    )
+  );
+};
+exports.default = Mma;
+
+/***/ }),
+
+/***/ 121:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(11);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _reactRouterDom = __webpack_require__(66);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -74,72 +724,72 @@ var Nav = function (_Component) {
             'div',
             { className: 'nav-links' },
             _react2.default.createElement(
-              'a',
-              { href: '/jquery/' },
-              'Baseball'
+              _reactRouterDom.NavLink,
+              { to: '/mlb', activeClassName: 'selected' },
+              'Baseball '
             )
           ),
           _react2.default.createElement(
             'div',
             { className: 'nav-links' },
             _react2.default.createElement(
-              'a',
-              { href: '/jquery/' },
-              'Basketball'
+              _reactRouterDom.NavLink,
+              { to: '/nba', activeClassName: 'selected' },
+              'BasketBall '
             )
           ),
           _react2.default.createElement(
             'div',
             { className: 'nav-links' },
             _react2.default.createElement(
-              'a',
-              { href: '/jquery/' },
-              'Boxing'
+              _reactRouterDom.NavLink,
+              { to: '/boxing', activeClassName: 'selected' },
+              'Boxing '
             )
           ),
           _react2.default.createElement(
             'div',
             { className: 'nav-links' },
             _react2.default.createElement(
-              'a',
-              { href: '/jquery/' },
-              'Football'
+              _reactRouterDom.NavLink,
+              { to: '/nfl', activeClassName: 'selected' },
+              'Nfl '
             )
           ),
           _react2.default.createElement(
             'div',
             { className: 'nav-links' },
             _react2.default.createElement(
-              'a',
-              { href: '/jquery/' },
-              'Ice Hockey'
+              _reactRouterDom.NavLink,
+              { to: '/hockey', activeClassName: 'selected' },
+              'Hockey '
             )
           ),
           _react2.default.createElement(
             'div',
             { className: 'nav-links' },
             _react2.default.createElement(
-              'a',
-              { href: '/jquery/' },
-              'Soccer'
+              _reactRouterDom.NavLink,
+              { to: '/soccer', activeClassName: 'selected' },
+              'Soccer '
             )
           ),
           _react2.default.createElement(
             'div',
             { className: 'nav-links' },
             _react2.default.createElement(
-              'a',
-              { href: '/jquery/' },
-              'Tennis'
+              _reactRouterDom.NavLink,
+              { to: '/tennis', activeClassName: 'selected' },
+              'Tennis '
             )
           ),
           _react2.default.createElement(
             'div',
             { className: 'nav-links' },
             _react2.default.createElement(
-              'a',
-              { href: '/jquery/' },
-              'UFC/MMA'
+              _reactRouterDom.NavLink,
+              { to: '/mma', activeClassName: 'selected' },
+              'UFC/MMA '
             )
           )
         )
@@ -154,7 +804,7 @@ exports.default = Nav;
 
 /***/ }),
 
-/***/ 101:
+/***/ 122:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -164,11 +814,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _react = __webpack_require__(13);
+var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(14);
+var _reactDom = __webpack_require__(11);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -230,7 +880,7 @@ exports.default = Nfl;
 
 /***/ }),
 
-/***/ 102:
+/***/ 123:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1148,7 +1798,611 @@ exports.default = mlbdata;
 
 /***/ }),
 
-/***/ 103:
+/***/ 124:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var mmadata = [{
+    "ID": "f53cd5fb-cd43-4550-a42c-37e9fd40dcad",
+    "HomeTeam": "Michael Johnson",
+    "AwayTeam": "Andre Fili",
+    "Sport": 11,
+    "MatchTime": "2018-08-26T03:59:00",
+    "Details": "UFC Fight Night 135 - Featherweight 3 rounds - Pinnacle Bank Arena - Lincoln, Nebraska - FS1",
+    "HomeROT": "60004",
+    "AwayROT": "60003",
+    "Odds": [{
+        "ID": "f53cd5fb-cd43-4550-a42c-37e9fd40dcad",
+        "EventID": "f53cd5fb-cd43-4550-a42c-37e9fd40dcad",
+        "OddType": "Game",
+        "MoneyLineAway": "-120",
+        "MoneyLineHome": "-102",
+        "OverLine": "-159",
+        "TotalNumber": "2.5",
+        "UnderLine": "131",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "8b2f273b-12e7-4aa6-995e-613b5dde8d1b",
+    "HomeTeam": "James Vick",
+    "AwayTeam": "Justin Gaethje",
+    "Sport": 11,
+    "MatchTime": "2018-08-26T04:30:00",
+    "Details": "UFC Fight Night 135 - Lightweight 5 rounds - Pinnacle Bank Arena - Lincoln, Nebraska - FS1",
+    "HomeROT": "60002",
+    "AwayROT": "60001",
+    "Odds": [{
+        "ID": "8b2f273b-12e7-4aa6-995e-613b5dde8d1b",
+        "EventID": "8b2f273b-12e7-4aa6-995e-613b5dde8d1b",
+        "OddType": "Game",
+        "MoneyLineAway": "122",
+        "MoneyLineHome": "-145",
+        "OverLine": "-101",
+        "TotalNumber": "2.5",
+        "UnderLine": "-123",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "6d3e8b2c-1b4d-4747-85e4-289c6acf8f0a",
+    "HomeTeam": "Ryan Benoit",
+    "AwayTeam": "Roberto Sanchez",
+    "Sport": 11,
+    "MatchTime": "2018-09-08T22:20:00",
+    "Details": "UFC 228 - Flyweight 3 rounds - American Airlines Center - Dallas, Texas - UFC Fight Pass",
+    "HomeROT": "24324",
+    "AwayROT": "24323",
+    "Odds": [{
+        "ID": "6d3e8b2c-1b4d-4747-85e4-289c6acf8f0a",
+        "EventID": "6d3e8b2c-1b4d-4747-85e4-289c6acf8f0a",
+        "OddType": "Game",
+        "MoneyLineAway": "-107",
+        "MoneyLineHome": "-119",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "a35211b3-8a97-489f-8135-5ae81fdd9057",
+    "HomeTeam": "Irene Aldana",
+    "AwayTeam": "Lucie Pudilova",
+    "Sport": 11,
+    "MatchTime": "2018-09-08T22:30:00",
+    "Details": "UFC 228 - Bantamweight 3 rounds - American Airlines Center - Dallas, Texas - UFC Fight Pass",
+    "HomeROT": "24329",
+    "AwayROT": "24328",
+    "Odds": [{
+        "ID": "a35211b3-8a97-489f-8135-5ae81fdd9057",
+        "EventID": "a35211b3-8a97-489f-8135-5ae81fdd9057",
+        "OddType": "Game",
+        "MoneyLineAway": "-112",
+        "MoneyLineHome": "-112",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "facaa183-cfcc-4977-876b-a3c407493a47",
+    "HomeTeam": "Craig White",
+    "AwayTeam": "Diego Sanchez",
+    "Sport": 11,
+    "MatchTime": "2018-09-08T22:30:00",
+    "Details": "UFC 228 - Welterweight 3 rounds - American Airlines Center - Dallas, Texas - UFC Fight Pass ",
+    "HomeROT": "24328",
+    "AwayROT": "24327",
+    "Odds": [{
+        "ID": "facaa183-cfcc-4977-876b-a3c407493a47",
+        "EventID": "facaa183-cfcc-4977-876b-a3c407493a47",
+        "OddType": "Game",
+        "MoneyLineAway": "180",
+        "MoneyLineHome": "-227",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "30025277-e000-4a21-ad7e-d50078f6262d",
+    "HomeTeam": "Alex White",
+    "AwayTeam": "Jim Miller",
+    "Sport": 11,
+    "MatchTime": "2018-09-08T23:00:00",
+    "Details": "UFC 228 - Lightweight 3 rounds - American Airlines Center - Dallas, Texas - FS1",
+    "HomeROT": "24322",
+    "AwayROT": "24321",
+    "Odds": [{
+        "ID": "30025277-e000-4a21-ad7e-d50078f6262d",
+        "EventID": "30025277-e000-4a21-ad7e-d50078f6262d",
+        "OddType": "Game",
+        "MoneyLineAway": "123",
+        "MoneyLineHome": "-150",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "54d25e8a-a235-47f0-983f-f7b5f485c230",
+    "HomeTeam": "Jimmie Rivera",
+    "AwayTeam": "John Dodson",
+    "Sport": 11,
+    "MatchTime": "2018-09-09T00:00:00",
+    "Details": "UFC 228 - Bantamweight 3 rounds - American Airlines Center - Dallas, Texas - FS1",
+    "HomeROT": "24320",
+    "AwayROT": "24319",
+    "Odds": [{
+        "ID": "54d25e8a-a235-47f0-983f-f7b5f485c230",
+        "EventID": "54d25e8a-a235-47f0-983f-f7b5f485c230",
+        "OddType": "Game",
+        "MoneyLineAway": "103",
+        "MoneyLineHome": "-129",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "c4dd0999-ef2f-4e3d-9a58-383d565af315",
+    "HomeTeam": "Abdul Razak Alhassan",
+    "AwayTeam": "Niko Price",
+    "Sport": 11,
+    "MatchTime": "2018-09-09T00:30:00",
+    "Details": "UFC 228 - Welterweight 3 rounds - American Airlines Center - Dallas, Texas - FS1",
+    "HomeROT": "24318",
+    "AwayROT": "24317",
+    "Odds": [{
+        "ID": "c4dd0999-ef2f-4e3d-9a58-383d565af315",
+        "EventID": "c4dd0999-ef2f-4e3d-9a58-383d565af315",
+        "OddType": "Game",
+        "MoneyLineAway": "129",
+        "MoneyLineHome": "-157",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "5b30e4a0-eb6d-4c0b-8bce-097841b22b1b",
+    "HomeTeam": "Charles Byrd",
+    "AwayTeam": "Darren Stewart",
+    "Sport": 11,
+    "MatchTime": "2018-09-09T01:00:00",
+    "Details": "UFC 228 - Middleweight 3 rounds - American Airlines Center - Dallas, Texas - FS1",
+    "HomeROT": "24316",
+    "AwayROT": "24315",
+    "Odds": [{
+        "ID": "5b30e4a0-eb6d-4c0b-8bce-097841b22b1b",
+        "EventID": "5b30e4a0-eb6d-4c0b-8bce-097841b22b1b",
+        "OddType": "Game",
+        "MoneyLineAway": "179",
+        "MoneyLineHome": "-226",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "f851cd70-53c3-4dc5-b1d1-7cb180551a91",
+    "HomeTeam": "Aljamain Sterling",
+    "AwayTeam": "Cody Stamann",
+    "Sport": 11,
+    "MatchTime": "2018-09-09T01:30:00",
+    "Details": "UFC 228 - Bantamweight 3 rounds - American Airlines Center - Dallas, Texas - PPV",
+    "HomeROT": "24314",
+    "AwayROT": "24313",
+    "Odds": [{
+        "ID": "f851cd70-53c3-4dc5-b1d1-7cb180551a91",
+        "EventID": "f851cd70-53c3-4dc5-b1d1-7cb180551a91",
+        "OddType": "Game",
+        "MoneyLineAway": "111",
+        "MoneyLineHome": "-137",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "0456da40-f001-481f-a2a5-5fc8682abf4a",
+    "HomeTeam": "Zabit Magomedsharipov",
+    "AwayTeam": "Yair Rodriguez",
+    "Sport": 11,
+    "MatchTime": "2018-09-09T02:00:00",
+    "Details": "UFC 228 - Featherweight 3 rounds - American Airlines Center - Dallas, Texas - PPV",
+    "HomeROT": "24312",
+    "AwayROT": "24311",
+    "Odds": [{
+        "ID": "0456da40-f001-481f-a2a5-5fc8682abf4a",
+        "EventID": "0456da40-f001-481f-a2a5-5fc8682abf4a",
+        "OddType": "Game",
+        "MoneyLineAway": "370",
+        "MoneyLineHome": "-603",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "1dac4814-f0ed-4488-8f71-87c4ade71879",
+    "HomeTeam": "Geoff Neal",
+    "AwayTeam": "Frank Camacho",
+    "Sport": 11,
+    "MatchTime": "2018-09-09T02:00:00",
+    "HomeROT": "24326",
+    "AwayROT": "24325",
+    "Odds": [{
+        "ID": "1dac4814-f0ed-4488-8f71-87c4ade71879",
+        "EventID": "1dac4814-f0ed-4488-8f71-87c4ade71879",
+        "OddType": "Game",
+        "MoneyLineAway": "155",
+        "MoneyLineHome": "-187",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "39deb0d8-fa3c-4a1a-9064-34816cf75dac",
+    "HomeTeam": "Tatiana Suarez",
+    "AwayTeam": "CARLA ESPARZA",
+    "Sport": 11,
+    "MatchTime": "2018-09-09T02:30:00",
+    "Details": "UFC 228 - Strawweight 3 rounds - American Airlines Center - Dallas, Texas - PPV",
+    "HomeROT": "24310",
+    "AwayROT": "24309",
+    "Odds": [{
+        "ID": "39deb0d8-fa3c-4a1a-9064-34816cf75dac",
+        "EventID": "39deb0d8-fa3c-4a1a-9064-34816cf75dac",
+        "OddType": "Game",
+        "MoneyLineAway": "387",
+        "MoneyLineHome": "-553",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "a5749633-9fee-4315-a2f4-ce74728e5bac",
+    "HomeTeam": "Valentina Shevchenko",
+    "AwayTeam": "Nicco Montano",
+    "Sport": 11,
+    "MatchTime": "2018-09-09T02:30:00",
+    "Details": "UFC 228 - Flyweight 5 rounds - American Airlines Center - Dallas, Texas - PPV",
+    "HomeROT": "24306",
+    "AwayROT": "24305",
+    "Odds": [{
+        "ID": "a5749633-9fee-4315-a2f4-ce74728e5bac",
+        "EventID": "a5749633-9fee-4315-a2f4-ce74728e5bac",
+        "OddType": "Game",
+        "MoneyLineAway": "666",
+        "MoneyLineHome": "-1108",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "74873ac6-795d-45fe-96e7-e5dc92b48a65",
+    "HomeTeam": "Jessica Andrade",
+    "AwayTeam": "Karolina Kowalkiewicx",
+    "Sport": 11,
+    "MatchTime": "2018-09-09T03:00:00",
+    "Details": "UFC 228 - Strawweight 3 rounds - American Airlines Center - Dallas, Texas - PPV ",
+    "HomeROT": "24308",
+    "AwayROT": "24307",
+    "Odds": [{
+        "ID": "74873ac6-795d-45fe-96e7-e5dc92b48a65",
+        "EventID": "74873ac6-795d-45fe-96e7-e5dc92b48a65",
+        "OddType": "Game",
+        "MoneyLineAway": "324",
+        "MoneyLineHome": "-437",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "74ea4b20-e348-44f0-bcc6-7546c86988c5",
+    "HomeTeam": "Tyron Woodley",
+    "AwayTeam": "Darren Till",
+    "Sport": 11,
+    "MatchTime": "2018-09-09T03:00:00",
+    "Details": "UFC 228 - Welterweight 5 rounds - American Airlines Center - Dallas, Texas - PPV",
+    "HomeROT": "200122",
+    "AwayROT": "200121",
+    "Odds": [{
+        "ID": "74ea4b20-e348-44f0-bcc6-7546c86988c5",
+        "EventID": "74ea4b20-e348-44f0-bcc6-7546c86988c5",
+        "OddType": "Game",
+        "MoneyLineAway": "-100",
+        "MoneyLineHome": "-124",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "b50b7247-2201-4441-9053-86b728a1597a",
+    "HomeTeam": "Mark Hunt",
+    "AwayTeam": "Alexey Oleinik",
+    "Sport": 11,
+    "MatchTime": "2018-09-16T02:00:00",
+    "HomeROT": "99106",
+    "AwayROT": "99105",
+    "Odds": [{
+        "ID": "b50b7247-2201-4441-9053-86b728a1597a",
+        "EventID": "b50b7247-2201-4441-9053-86b728a1597a",
+        "OddType": "Game",
+        "MoneyLineAway": "208",
+        "MoneyLineHome": "-257",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "6178a410-61d1-4e82-b98d-cb402bf30416",
+    "HomeTeam": "Gegard Mousasi",
+    "AwayTeam": "Rory Macdonald",
+    "Sport": 11,
+    "MatchTime": "2018-09-30T02:00:00",
+    "HomeROT": "27002",
+    "AwayROT": "27001",
+    "Odds": [{
+        "ID": "6178a410-61d1-4e82-b98d-cb402bf30416",
+        "EventID": "6178a410-61d1-4e82-b98d-cb402bf30416",
+        "OddType": "Game",
+        "MoneyLineAway": "197",
+        "MoneyLineHome": "-232",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "14fe0578-caba-41fc-89b1-081c1d634976",
+    "HomeTeam": "Yana Kunitskaya",
+    "AwayTeam": "Lina Lansberg",
+    "Sport": 11,
+    "MatchTime": "2018-10-07T02:00:00",
+    "HomeROT": "24406",
+    "AwayROT": "24405",
+    "Odds": [{
+        "ID": "14fe0578-caba-41fc-89b1-081c1d634976",
+        "EventID": "14fe0578-caba-41fc-89b1-081c1d634976",
+        "OddType": "Game",
+        "MoneyLineAway": "135",
+        "MoneyLineHome": "-155",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "b6ef1c22-a57f-4c6a-80f0-9abf3c86e29a",
+    "HomeTeam": "Sergio Pettis",
+    "AwayTeam": "Jussier Formiga",
+    "Sport": 11,
+    "MatchTime": "2018-10-07T02:00:00",
+    "HomeROT": "24404",
+    "AwayROT": "24403",
+    "Odds": [{
+        "ID": "b6ef1c22-a57f-4c6a-80f0-9abf3c86e29a",
+        "EventID": "b6ef1c22-a57f-4c6a-80f0-9abf3c86e29a",
+        "OddType": "Game",
+        "MoneyLineAway": "120",
+        "MoneyLineHome": "-140",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "834cad8e-fc9f-4692-a8bb-b7cf6a4d4a6f",
+    "HomeTeam": "Khabib Numagomedov",
+    "AwayTeam": "Conor McGregor",
+    "Sport": 11,
+    "MatchTime": "2018-10-07T02:35:00",
+    "HomeROT": "24402",
+    "AwayROT": "24401",
+    "Odds": [{
+        "ID": "834cad8e-fc9f-4692-a8bb-b7cf6a4d4a6f",
+        "EventID": "834cad8e-fc9f-4692-a8bb-b7cf6a4d4a6f",
+        "OddType": "Game",
+        "MoneyLineAway": "146",
+        "MoneyLineHome": "-168",
+        "OverLine": "-102",
+        "TotalNumber": "2.5",
+        "UnderLine": "-121",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "75dd3eb2-4570-4881-b1b2-b3a544b47b2e",
+    "HomeTeam": "Ryan Bader",
+    "AwayTeam": "Matt Mitrione",
+    "Sport": 11,
+    "MatchTime": "2018-10-13T00:00:00",
+    "HomeROT": "39902",
+    "AwayROT": "39901",
+    "Odds": [{
+        "ID": "75dd3eb2-4570-4881-b1b2-b3a544b47b2e",
+        "EventID": "75dd3eb2-4570-4881-b1b2-b3a544b47b2e",
+        "OddType": "Game",
+        "MoneyLineAway": "190",
+        "MoneyLineHome": "-225",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}, {
+    "ID": "f02f6b99-8b7c-4a11-9000-29445424caab",
+    "HomeTeam": "Fedor Emelianenko",
+    "AwayTeam": "Chael Sonnen",
+    "Sport": 11,
+    "MatchTime": "2018-10-14T00:00:00",
+    "HomeROT": "39906",
+    "AwayROT": "39905",
+    "Odds": [{
+        "ID": "f02f6b99-8b7c-4a11-9000-29445424caab",
+        "EventID": "f02f6b99-8b7c-4a11-9000-29445424caab",
+        "OddType": "Game",
+        "MoneyLineAway": "220",
+        "MoneyLineHome": "-260",
+        "OverLine": "0",
+        "TotalNumber": "0.0",
+        "UnderLine": "0",
+        "PointSpreadAway": "0.0",
+        "PointSpreadHome": "0.0",
+        "PointSpreadAwayLine": "0",
+        "PointSpreadHomeLine": "0",
+        "DrawLine": "0",
+        "SiteID": 11,
+        "LastUpdated": "2018-08-26T03:39:05"
+    }]
+}];
+exports.default = mmadata;
+
+/***/ }),
+
+/***/ 125:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1979,7 +3233,7 @@ exports.default = nfldata;
 
 /***/ }),
 
-/***/ 105:
+/***/ 127:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1989,41 +3243,59 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(13);
+var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(14);
+var _reactDom = __webpack_require__(11);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _nfldata = __webpack_require__(103);
+var _reactRouterDom = __webpack_require__(66);
+
+var _nfldata = __webpack_require__(125);
 
 var _nfldata2 = _interopRequireDefault(_nfldata);
 
-var _mlbdata = __webpack_require__(102);
+var _mlbdata = __webpack_require__(123);
 
 var _mlbdata2 = _interopRequireDefault(_mlbdata);
 
-var _Nav = __webpack_require__(100);
+var _mmadata = __webpack_require__(124);
+
+var _mmadata2 = _interopRequireDefault(_mmadata);
+
+var _Nav = __webpack_require__(121);
 
 var _Nav2 = _interopRequireDefault(_Nav);
 
-var _Nfl = __webpack_require__(101);
+var _Nfl = __webpack_require__(122);
 
 var _Nfl2 = _interopRequireDefault(_Nfl);
 
-var _Mlb = __webpack_require__(99);
+var _Mlb = __webpack_require__(119);
 
 var _Mlb2 = _interopRequireDefault(_Mlb);
 
-var _Gameselected = __webpack_require__(97);
+var _Mma = __webpack_require__(120);
+
+var _Mma2 = _interopRequireDefault(_Mma);
+
+var _Gameselected = __webpack_require__(115);
 
 var _Gameselected2 = _interopRequireDefault(_Gameselected);
 
-var _Header = __webpack_require__(98);
+var _HeaderNfl = __webpack_require__(118);
 
-var _Header2 = _interopRequireDefault(_Header);
+var _HeaderNfl2 = _interopRequireDefault(_HeaderNfl);
+
+var _HeaderMlb = __webpack_require__(116);
+
+var _HeaderMlb2 = _interopRequireDefault(_HeaderMlb);
+
+var _HeaderMma = __webpack_require__(117);
+
+var _HeaderMma2 = _interopRequireDefault(_HeaderMma);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2061,6 +3333,206 @@ var Layout = function (_Component) {
 
     _this.gameLoopNfl = function () {
       return _this.state.nfldata.map(function (item) {
+        return _react2.default.createElement(
+          'div',
+          { className: 'games-container', key: item.ID },
+          _react2.default.createElement(
+            'div',
+            { className: 'games match-time' },
+            _react2.default.createElement(
+              'h5',
+              null,
+              _this.convertTime(item.MatchTime)
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'gamelist' },
+            _react2.default.createElement(
+              'div',
+              { className: 'games teams' },
+              _react2.default.createElement(
+                'h5',
+                { className: 'hometeam' },
+                item.AwayTeam
+              )
+            ),
+            _react2.default.createElement(
+              'h5',
+              { className: 'spread', onClick: function onClick(e) {
+                  return _this.wagersAwaySpread(item);
+                } },
+              item.Odds[0].PointSpreadAway,
+              ' (',
+              item.Odds[0].PointSpreadAwayLine,
+              ')'
+            ),
+            _react2.default.createElement(
+              'h5',
+              { className: 'moneyline', onClick: function onClick(e) {
+                  return _this.wagersAwayMoneyLine(item);
+                } },
+              item.Odds[0].MoneyLineAway
+            ),
+            _react2.default.createElement(
+              'h5',
+              { className: 'total', onClick: function onClick(e) {
+                  return _this.wagersAwayTotalOver(item);
+                } },
+              '0 ',
+              item.Odds[0].TotalNumber,
+              ' ( ',
+              item.Odds[0].OverLine,
+              ' )'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'gamelist' },
+            _react2.default.createElement(
+              'div',
+              { className: 'games teams' },
+              _react2.default.createElement(
+                'h5',
+                { className: 'hometeam' },
+                item.HomeTeam
+              )
+            ),
+            _react2.default.createElement(
+              'h5',
+              { className: 'spread', onClick: function onClick(e) {
+                  return _this.wagersHomeSpread(item);
+                } },
+              item.Odds[0].PointSpreadHome,
+              ' (',
+              item.Odds[0].PointSpreadHomeLine,
+              ')'
+            ),
+            _react2.default.createElement(
+              'h5',
+              { className: 'moneyline', onClick: function onClick(e) {
+                  return _this.wagersHomeMoneyLine(item);
+                } },
+              item.Odds[0].MoneyLineHome
+            ),
+            _react2.default.createElement(
+              'h5',
+              { className: 'total', onClick: function onClick(e) {
+                  return _this.wagersHomeTotalUnder(item);
+                } },
+              'U ',
+              item.Odds[0].TotalNumber,
+              ' ( ',
+              item.Odds[0].UnderLine,
+              ' )'
+            )
+          )
+        );
+      });
+    };
+
+    _this.gameLoopMlb = function () {
+      return _this.state.mlbdata.map(function (item) {
+        return _react2.default.createElement(
+          'div',
+          { className: 'games-container', key: item.ID },
+          _react2.default.createElement(
+            'div',
+            { className: 'games match-time' },
+            _react2.default.createElement(
+              'h5',
+              null,
+              _this.convertTime(item.MatchTime)
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'gamelist' },
+            _react2.default.createElement(
+              'div',
+              { className: 'games teams' },
+              _react2.default.createElement(
+                'h5',
+                { className: 'hometeam' },
+                item.AwayTeam
+              )
+            ),
+            _react2.default.createElement(
+              'h5',
+              { className: 'spread', onClick: function onClick(e) {
+                  return _this.wagersAwaySpread(item);
+                } },
+              item.Odds[0].PointSpreadAway,
+              ' (',
+              item.Odds[0].PointSpreadAwayLine,
+              ')'
+            ),
+            _react2.default.createElement(
+              'h5',
+              { className: 'moneyline', onClick: function onClick(e) {
+                  return _this.wagersAwayMoneyLine(item);
+                } },
+              item.Odds[0].MoneyLineAway
+            ),
+            _react2.default.createElement(
+              'h5',
+              { className: 'total', onClick: function onClick(e) {
+                  return _this.wagersAwayTotalOver(item);
+                } },
+              '0 ',
+              item.Odds[0].TotalNumber,
+              ' ( ',
+              item.Odds[0].OverLine,
+              ' )'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'gamelist' },
+            _react2.default.createElement(
+              'div',
+              { className: 'games teams' },
+              _react2.default.createElement(
+                'h5',
+                { className: 'hometeam' },
+                item.HomeTeam
+              )
+            ),
+            _react2.default.createElement(
+              'h5',
+              { className: 'spread', onClick: function onClick(e) {
+                  return _this.wagersHomeSpread(item);
+                } },
+              item.Odds[0].PointSpreadHome,
+              ' (',
+              item.Odds[0].PointSpreadHomeLine,
+              ')'
+            ),
+            _react2.default.createElement(
+              'h5',
+              { className: 'moneyline', onClick: function onClick(e) {
+                  return _this.wagersHomeMoneyLine(item);
+                } },
+              item.Odds[0].MoneyLineHome
+            ),
+            _react2.default.createElement(
+              'h5',
+              { className: 'total', onClick: function onClick(e) {
+                  return _this.wagersHomeTotalUnder(item);
+                } },
+              'U ',
+              item.Odds[0].TotalNumber,
+              ' ( ',
+              item.Odds[0].UnderLine,
+              ' )'
+            )
+          )
+        );
+      });
+    };
+
+    _this.gameLoopMma = function () {
+      return _this.state.mmadata.map(function (item) {
         return _react2.default.createElement(
           'div',
           { className: 'games-container', key: item.ID },
@@ -2335,6 +3807,8 @@ var Layout = function (_Component) {
 
     _this.state = {
       nfldata: _nfldata2.default,
+      mlbdata: _mlbdata2.default,
+      mmadata: _mmadata2.default,
       gameSelected: []
     };
     return _this;
@@ -2360,17 +3834,49 @@ var Layout = function (_Component) {
   _createClass(Layout, [{
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       return _react2.default.createElement(
-        'div',
-        { className: 'app-container' },
-        _react2.default.createElement(_Header2.default, null),
-        _react2.default.createElement(_Nav2.default, null),
-        _react2.default.createElement(_Mlb2.default, { gameLoopNfl: this.gameLoopNfl }),
-        _react2.default.createElement(_Gameselected2.default, { gameSelected: this.state.gameSelected,
-          cancelBet: this.cancelBet,
-          wagers: this.state.wagers,
-          handleBetRisk: this.handleBetRisk,
-          convertTime: this.convertTime })
+        _reactRouterDom.BrowserRouter,
+        null,
+        _react2.default.createElement(
+          'div',
+          { className: 'app-container' },
+          _react2.default.createElement(
+            _reactRouterDom.Switch,
+            null,
+            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _HeaderNfl2.default }),
+            _react2.default.createElement(_reactRouterDom.Route, { path: '/mlb', component: _HeaderMlb2.default }),
+            _react2.default.createElement(_reactRouterDom.Route, { path: '/nfl', component: _HeaderNfl2.default }),
+            _react2.default.createElement(_reactRouterDom.Route, { path: '/mma', component: _HeaderMma2.default })
+          ),
+          _react2.default.createElement(_Nav2.default, null),
+          _react2.default.createElement(_reactRouterDom.Route, {
+            exact: true, path: '/',
+            render: function render(props) {
+              return _react2.default.createElement(_Mlb2.default, _extends({}, props, { gameLoopMlb: _this2.gameLoopMlb }));
+            } }),
+          _react2.default.createElement(_reactRouterDom.Route, {
+            path: '/mlb',
+            render: function render(props) {
+              return _react2.default.createElement(_Mlb2.default, _extends({}, props, { gameLoopMlb: _this2.gameLoopMlb }));
+            } }),
+          _react2.default.createElement(_reactRouterDom.Route, {
+            path: '/nfl',
+            render: function render(props) {
+              return _react2.default.createElement(_Nfl2.default, _extends({}, props, { gameLoopNfl: _this2.gameLoopNfl }));
+            } }),
+          _react2.default.createElement(_reactRouterDom.Route, {
+            path: '/mma',
+            render: function render(props) {
+              return _react2.default.createElement(_Mma2.default, _extends({}, props, { gameLoopMma: _this2.gameLoopMma }));
+            } }),
+          _react2.default.createElement(_Gameselected2.default, { gameSelected: this.state.gameSelected,
+            cancelBet: this.cancelBet,
+            wagers: this.state.wagers,
+            handleBetRisk: this.handleBetRisk,
+            convertTime: this.convertTime })
+        )
       );
     }
   }]);
@@ -2382,419 +3888,6 @@ var app = document.getElementById('app');
 
 _reactDom2.default.render(_react2.default.createElement(Layout, null), app);
 
-/***/ }),
-
-/***/ 97:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(13);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(14);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _lodash = __webpack_require__(132);
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Gameselected = function (_Component) {
-  _inherits(Gameselected, _Component);
-
-  function Gameselected() {
-    _classCallCheck(this, Gameselected);
-
-    var _this = _possibleConstructorReturn(this, (Gameselected.__proto__ || Object.getPrototypeOf(Gameselected)).call(this));
-
-    _this.cancelBet = function (item) {
-      _this.props.cancelBet(item);
-    };
-
-    _this.handleBetRisk = function (e, item) {
-      var bet = e.target.value;
-      if (item.juice < 0) {
-        var calcBet = function calcBet(bet) {
-          var newAmount = 100 / item.juice * bet;
-          return newAmount;
-        };
-        var win = calcBet(bet);
-        win = Math.round(win * 100) / 100;
-        win = Math.abs(win);
-        _this.props.handleBetRisk(item, win, bet);
-      } else {
-        var _calcBet = function _calcBet(bet) {
-          var newAmount = item.juice * .01 * bet;
-          return newAmount;
-        };
-        var _win = _calcBet(bet);
-        _win = Math.round(_win * 100) / 100;
-        _this.props.handleBetRisk(item, _win, bet);
-      }
-    };
-
-    _this.displaySelectedBets = function () {
-      var games = _this.props.gameSelected;
-      return games.map(function (item, i) {
-        return _react2.default.createElement(
-          'div',
-          { className: 'game-selected-container', key: i },
-          _react2.default.createElement(
-            'div',
-            { className: 'close-btn', onClick: function onClick() {
-                return _this.cancelBet(item);
-              } },
-            _react2.default.createElement('img', { src: './img/sportIcons/close-btn.svg' })
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'bet-container' },
-            _react2.default.createElement(
-              'div',
-              { className: 'bet-chosen' },
-              _react2.default.createElement(
-                'span',
-                { className: 'teamChozen' },
-                item.teamChosen,
-                '  ',
-                item.line > 0 && item.wagerType === 'moneyline' || item.line > 0 && item.wagerType === 'spread' ? '+ ' + item.line : item.line,
-                ' '
-              ),
-              _react2.default.createElement(
-                'span',
-                { className: 'wager-type' },
-                item.wagerType
-              )
-            ),
-            _react2.default.createElement(
-              'span',
-              { className: 'wager-type' },
-              item.wagerType === 'moneyline' ? '' : item.juice
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'match-container' },
-            _react2.default.createElement(
-              'span',
-              { className: 'game' },
-              item.Details
-            ),
-            _react2.default.createElement(
-              'span',
-              { className: 'match-time' },
-              _this.props.convertTime(item.matchTime)
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'wager-amount' },
-            _react2.default.createElement(
-              'div',
-              { className: 'group-risk' },
-              _react2.default.createElement('input', { type: 'number', name: 'risk', value: item.risk, onChange: function onChange(e) {
-                  return _this.handleBetRisk(e, item);
-                } }),
-              _react2.default.createElement(
-                'span',
-                null,
-                'Risk'
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'group-winbox' },
-              _react2.default.createElement(
-                'h5',
-                null,
-                item.win
-              ),
-              _react2.default.createElement(
-                'span',
-                null,
-                'Win'
-              )
-            )
-          )
-        );
-      });
-    };
-
-    _this.totalMoneyRisked = function () {
-      var s = _lodash2.default.reduce(_this.props.gameSelected, function (s, entry) {
-        return s + parseFloat(entry.risk);
-      }, 0);
-      s = Math.abs(Math.round(s * 100) / 100);
-      return s;
-    };
-
-    _this.totalMoneyWinPossible = function () {
-      var s = _lodash2.default.reduce(_this.props.gameSelected, function (s, entry) {
-        return s + parseFloat(entry.win);
-      }, 0);
-      s = Math.abs(Math.round(s * 100) / 100);
-
-      return s;
-    };
-
-    _this.state = {};
-    return _this;
-  }
-
-  //passes the item to parent container method to filter/cancel a bet when user clicks the cancel icon
-
-  // Takes in the bet amount and passes the newly calculated risk & win amount to the parent method, to update the state of gameselected with it.
-
-
-  // displays/renders all bets the user has selected to bet on
-
-  //Updates the toal amount the user is wanting to wager on the current betslip
-
-  //Updates the toal amount the user can win based on total bets on the current betslip
-
-
-  _createClass(Gameselected, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        { id: 'game-selected' },
-        _react2.default.createElement(
-          'h1',
-          null,
-          'Bet Slip'
-        ),
-        this.displaySelectedBets(),
-        _react2.default.createElement(
-          'div',
-          { className: 'wager-confirmation-container' },
-          _react2.default.createElement(
-            'div',
-            { className: 'confirmation-group bets' },
-            _react2.default.createElement(
-              'h5',
-              null,
-              'Total Bets:'
-            ),
-            _react2.default.createElement(
-              'h5',
-              null,
-              this.props.gameSelected.length
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'confirmation-group bet-risk' },
-            _react2.default.createElement(
-              'h5',
-              null,
-              'Total Stake:'
-            ),
-            _react2.default.createElement(
-              'h5',
-              null,
-              ' ',
-              isNaN(this.totalMoneyRisked()) ? ' Fill-in bet' : '$' + this.totalMoneyRisked()
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'confirmation-group bet-win' },
-            _react2.default.createElement(
-              'h5',
-              null,
-              'Possible Winnings'
-            ),
-            _react2.default.createElement(
-              'h5',
-              null,
-              ' ',
-              isNaN(this.totalMoneyWinPossible()) ? '' : '$' + this.totalMoneyWinPossible()
-            )
-          ),
-          _react2.default.createElement(
-            'button',
-            { type: 'text' },
-            'Place Wager'
-          )
-        )
-      );
-    }
-  }]);
-
-  return Gameselected;
-}(_react.Component);
-
-exports.default = Gameselected;
-
-/***/ }),
-
-/***/ 98:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(13);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(14);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Header = function (_Component) {
-  _inherits(Header, _Component);
-
-  function Header() {
-    _classCallCheck(this, Header);
-
-    var _this = _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this));
-
-    _this.state = {};
-    return _this;
-  }
-
-  _createClass(Header, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        { id: 'header' },
-        _react2.default.createElement(
-          'div',
-          { className: 'header-logo' },
-          _react2.default.createElement('img', { src: './img/sportIcons/nflLogo.svg' })
-        ),
-        _react2.default.createElement('div', { className: 'account-section' }),
-        _react2.default.createElement(
-          'div',
-          { className: 'sport-icons' },
-          _react2.default.createElement(
-            'div',
-            { className: 'sports-group' },
-            _react2.default.createElement('img', { src: '/img/sportIcons/soccer.svg' }),
-            _react2.default.createElement('img', { src: '/img/sportIcons/football.svg' }),
-            _react2.default.createElement('img', { src: '/img/sportIcons/mma.svg' }),
-            _react2.default.createElement('img', { src: '/img/sportIcons/baseball.svg' })
-          )
-        )
-      );
-    }
-  }]);
-
-  return Header;
-}(_react.Component);
-
-exports.default = Header;
-
-/***/ }),
-
-/***/ 99:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(13);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(14);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Mlb = function Mlb(props) {
-
-  return _react2.default.createElement(
-    'div',
-    { id: 'nfl-section' },
-    _react2.default.createElement(
-      'div',
-      { className: 'games-section' },
-      _react2.default.createElement(
-        'div',
-        { className: 'title-headers' },
-        _react2.default.createElement(
-          'div',
-          { className: 'game-header' },
-          _react2.default.createElement(
-            'h5',
-            null,
-            'Team'
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'spread-header' },
-          _react2.default.createElement(
-            'h5',
-            null,
-            'Spread'
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'moneyline-header' },
-          _react2.default.createElement(
-            'h5',
-            null,
-            'MoneyLine'
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'overunder-header' },
-          _react2.default.createElement(
-            'h5',
-            null,
-            'Total'
-          )
-        )
-      ),
-      props.gameLoopNfl()
-    )
-  );
-};
-exports.default = Mlb;
-
 /***/ })
 
-},[105]);
+},[127]);
