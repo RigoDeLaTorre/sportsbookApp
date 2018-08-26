@@ -10,51 +10,41 @@ export default class Gameselected extends Component {
 
     }
   }
-handleChange = (item)=>{
-  console.log(item)
 
-this.props.handleChange(item)
+  //passes the item to parent container method to filter/cancel a bet when user clicks the cancel icon
+cancelBet = (item)=>{
+  this.props.cancelBet(item)
 }
-
-convertTime = (convert) => {
-  let date = new Date(convert);
-return date.toLocaleString() // "Wed Jun 29 2011 09:52:48 GMT-0700 (PDT)"
-}
-
-
+// Takes in the bet amount and passes the newly calculated risk & win amount to the parent method, to update the state of gameselected with it.
 handleBetRisk = (e,item) =>{
-
-let bet=e.target.value
-
-
-if(item.juice<0){
-  let calcBet =(bet)=>{
-      let newAmount = (100/item.juice)*bet;
-      return newAmount
-  }
-    let win = calcBet(bet)
-    win = Math.round(win * 100) / 100
-    win = Math.abs(win)
-  this.props.handleBetRisk(item,win,bet)
-}else{
-  let calcBet =(bet)=>{
-      let newAmount = (item.juice*.01)*bet;
-      return newAmount
-  }
-    let win = calcBet(bet)
-    win = Math.round(win * 100) / 100
-  this.props.handleBetRisk(item,win,bet)
-}
+    let bet=e.target.value
+    if(item.juice<0){
+      let calcBet =(bet)=>{
+          let newAmount = (100/item.juice)*bet;
+          return newAmount
+      }
+        let win = calcBet(bet)
+        win = Math.round(win * 100) / 100
+        win = Math.abs(win)
+        this.props.handleBetRisk(item,win,bet)
+    }else{
+      let calcBet =(bet)=>{
+          let newAmount = (item.juice*.01)*bet;
+          return newAmount
+      }
+        let win = calcBet(bet)
+        win = Math.round(win * 100) / 100
+        this.props.handleBetRisk(item,win,bet)
+    }
 }
 
-
-
-showme=()=>{
+// displays/renders all bets the user has selected to bet on
+displaySelectedBets=()=>{
   let games = this.props.gameSelected;
   return games.map((item,i)=>{
     return(
       <div className="game-selected-container" key ={i} >
-          <div className="close-btn" onClick={()=>this.handleChange(item)}>
+          <div className="close-btn" onClick={()=>this.cancelBet(item)}>
             <img src = "./img/sportIcons/close-btn.svg" />
           </div>
           <div className="bet-container">
@@ -66,7 +56,7 @@ showme=()=>{
           </div>
           <div className="match-container">
             <span className="game">{item.Details}</span>
-            <span className="match-time">{this.convertTime(item.matchTime)}</span>
+            <span className="match-time">{this.props.convertTime(item.matchTime)}</span>
           </div>
           <div className="wager-amount">
             <div className="group-risk">
@@ -82,6 +72,7 @@ showme=()=>{
     )
   })
 }
+//Updates the toal amount the user is wanting to wager on the current betslip
 totalMoneyRisked = ()=>{
   var s = _.reduce(this.props.gameSelected, function(s, entry) {
       return s + parseFloat(entry.risk);
@@ -89,6 +80,7 @@ totalMoneyRisked = ()=>{
     s = Math.abs(Math.round(s * 100) / 100)
   return s;
 }
+//Updates the toal amount the user can win based on total bets on the current betslip
 totalMoneyWinPossible = ()=>{
   var s = _.reduce(this.props.gameSelected, function(s, entry) {
       return s + parseFloat(entry.win);
@@ -102,7 +94,7 @@ totalMoneyWinPossible = ()=>{
     return (
       <div id ="game-selected" >
         <h1>Bet Slip</h1>
-        {this.showme()}
+        {this.displaySelectedBets()}
         <div className="wager-confirmation-container">
           <div className="confirmation-group bets">
             <h5>Total Bets:</h5>

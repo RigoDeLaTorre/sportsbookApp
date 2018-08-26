@@ -2,6 +2,7 @@ import React, { Component} from 'react'
 import ReactDOM from 'react-dom';
 
 
+
 export default class Nav extends Component {
   constructor () {
     super()
@@ -22,6 +23,7 @@ export default class Nav extends Component {
           <div className="icon"> <i className="fas fa-chevron-down"></i> </div>
         </div>
         <nav>
+      
           <div className="nav-links"><a href="/jquery/">Baseball</a></div>
           <div className="nav-links"><a href="/jquery/">Basketball</a></div>
           <div className="nav-links"><a href="/jquery/">Boxing</a></div>

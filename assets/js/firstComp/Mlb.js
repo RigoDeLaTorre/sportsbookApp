@@ -1,7 +1,7 @@
 import React, { Component} from 'react'
 import ReactDOM from 'react-dom';
 
- const Nfl = (props) => {
+ const Mlb = (props) => {
 
     return (
       <div id="nfl-section">
@@ -25,4 +25,4 @@ import ReactDOM from 'react-dom';
       </div>
     )
 }
-export default Nfl;
+export default Mlb;
